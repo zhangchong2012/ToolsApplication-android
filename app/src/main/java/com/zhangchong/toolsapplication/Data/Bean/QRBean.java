@@ -16,8 +16,12 @@ public class QRBean extends DaoBean{
     }
     public interface Columns extends DaoEntry.Columns {
         public static final String QR_TIME = "time";
+        public static final String QR_CONTENT = "content";
     }
 
     @Column(value = Columns.QR_TIME)
     private long time;
+
+    @Column(value = Columns.QR_CONTENT)
+    private String qrContent;
 }

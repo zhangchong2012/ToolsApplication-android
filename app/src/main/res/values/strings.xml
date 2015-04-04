@@ -5,9 +5,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-
     <string-array name="name_tools">
         <item>xls</item>
         <item>qrcode</item>
     </string-array>
+
+    <string name="title_activity_camera">CameraActivity</string>
+
 </resources>
