@@ -86,6 +86,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                 guideController.testCreateXls("test.xls");
                 break;
             case 1:
+                startActivity(CameraActivity.newIntent(this));
                 break;
             default:
                 break;

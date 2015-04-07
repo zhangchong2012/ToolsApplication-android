@@ -6,14 +6,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.zhangchong.toolsapplication.R;
+import com.zhangchong.toolsapplication.View.Controller.CameraManager;
 
 public class CameraActivity extends ActionBarActivity {
     public static final String TAG = CameraActivity.class.getSimpleName();
 
     private SurfaceView mCameraView;
+    private CameraViewCallback mCameraViewCallback;
+    private CameraManager mCameraManager;
+
+    private boolean mHasSurfaceView;
 
     public static Intent newIntent(Context context){
         Intent intent = new Intent(context, CameraActivity.class);
@@ -29,13 +35,36 @@ public class CameraActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCameraManager = new CameraManager(this);
         setContentView(R.layout.activity_camera);
         initViews();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     private void initViews(){
         mCameraView = (SurfaceView)findViewById(R.id.camera_view);
+        mCameraViewCallback = new CameraViewCallback();
+        mCameraView.getHolder().addCallback(mCameraViewCallback);
+        mCameraView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     @Override
@@ -58,5 +87,30 @@ public class CameraActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    class CameraViewCallback implements SurfaceHolder.Callback {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+            if(!mHasSurfaceView){
+                mHasSurfaceView = true;
+                try{
+                    mCameraManager.initCamera(holder);
+                }catch (Exception e){
+                    mHasSurfaceView = false;
+                }
+            }
+        }
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            mHasSurfaceView = false;
+        }
     }
 }
