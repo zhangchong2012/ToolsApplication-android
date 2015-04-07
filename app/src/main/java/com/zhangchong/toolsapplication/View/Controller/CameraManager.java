@@ -122,6 +122,7 @@ public class CameraManager {
         }
 
 
+
         public void initFromCamera(Camera camera){
             Camera.Parameters parameters = camera.getParameters();
             WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);

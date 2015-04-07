@@ -24,4 +24,6 @@ public class QRBean extends DaoBean{
 
     @Column(value = Columns.QR_CONTENT)
     private String qrContent;
+
+
 }

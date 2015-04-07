@@ -1,6 +1,7 @@
 package com.zhangchong.toolsapplication.View.Controller;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 
 import com.zhangchong.toolsapplication.Presenter.ApplicationPresenter;
 import com.zhangchong.toolsapplication.Utils.LogHelper;
@@ -62,6 +63,10 @@ public class GuideController implements IController{
         return mPresenter.getFilePath(fileName);
     }
 
+    public void testContentProvider(){
+        ContentResolver resolver = mActivity.getContentResolver();
+    }
+
     public void testCreateXls(String fileName){
         try{
             // 创建工作区
@@ -80,6 +85,10 @@ public class GuideController implements IController{
             // 第四个参数表示是否斜体,此处true表示为斜体
             // 第五个参数表示下划线样式
             // 第六个参数表示颜色样式，此处为Red
+            // Label label = new Label(col, row, title);
+            //   sheet.addCell(label);
+            //  mergeCells(int x,int y,int m,int n) :从第x+1列，y+1行到m+1列，n+1行合并
+
             WritableFont wf = new WritableFont(WritableFont.TIMES, 18,
                     WritableFont.BOLD, true, UnderlineStyle.NO_UNDERLINE,
                     Colour.RED);
