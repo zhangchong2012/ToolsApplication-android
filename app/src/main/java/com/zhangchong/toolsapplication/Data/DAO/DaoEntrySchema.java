@@ -7,6 +7,8 @@ import android.text.TextUtils;
 
 import com.zhangchong.toolsapplication.Utils.LogHelper;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -345,7 +347,7 @@ public class DaoEntrySchema {
         field.set(object, Enum.valueOf(enumType, dbString));
     }
 
-    void objectToValues(DaoEntry object, ContentValues values) {
+    public void objectToValues(DaoEntry object, ContentValues values) {
         objectToValues(object, values, true);
     }
 
@@ -460,12 +462,12 @@ public class DaoEntrySchema {
         }
     }
 
-    Cursor query(SQLiteDatabase db, String selection, String[] selectionArgs, String groupBy, String having,
+    public Cursor query(SQLiteDatabase db, String selection, String[] selectionArgs, String groupBy, String having,
                  String orderBy) {
         return db.query(mTableName, mProjection, selection, selectionArgs, groupBy, having, orderBy);
     }
 
-    Cursor query(SQLiteDatabase db, String selection, String[] selectionArgs, String groupBy, String having,
+    public Cursor query(SQLiteDatabase db, String selection, String[] selectionArgs, String groupBy, String having,
                  String orderBy, String limit) {
         return db.query(mTableName, mProjection, selection, selectionArgs, groupBy, having, orderBy, limit);
     }
@@ -693,8 +695,8 @@ public class DaoEntrySchema {
     // update(db, entry, values, selection, selectionArgs);
     // }
 
-    public void update(SQLiteDatabase db, ContentValues values, String selection, String[] selectionArgs) {
-        db.update(mTableName, values, selection, selectionArgs);
+    public int update(SQLiteDatabase db, ContentValues values, String selection, String[] selectionArgs) {
+        return db.update(mTableName, values, selection, selectionArgs);
     }
 
     public void update(SQLiteDatabase db, DaoEntry entry, ContentValues values, String selection,
@@ -725,12 +727,12 @@ public class DaoEntrySchema {
         db.update(mTableName, values, whereClause, whereArgs);
     }
 
-    public boolean deleteWithId(SQLiteDatabase db, long id) {
-        return db.delete(mTableName, "_id=?", new String[] { Long.toString(id) }) == 1;
+    public int deleteWithId(SQLiteDatabase db, long id) {
+        return db.delete(mTableName, "_id=?", new String[] { Long.toString(id) });
     }
 
-    public boolean delete(SQLiteDatabase db, String selection, String[] selectionArgs) {
-        return db.delete(mTableName, selection, selectionArgs) > 0;
+    public int delete(SQLiteDatabase db, String selection, String[] selectionArgs) {
+        return db.delete(mTableName, selection, selectionArgs) ;
     }
 
     public void createTables(SQLiteDatabase db) {
@@ -894,6 +896,8 @@ public class DaoEntrySchema {
     }
 
     public void dropTables(SQLiteDatabase db) {
+        if(TextUtils.isEmpty(mTableName))
+            return;
         String tableName = mTableName;
         StringBuilder sql = new StringBuilder("DROP TABLE IF EXISTS ");
         sql.append(tableName);

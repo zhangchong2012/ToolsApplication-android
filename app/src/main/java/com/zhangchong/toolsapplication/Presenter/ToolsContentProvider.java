@@ -1,38 +1,23 @@
 package com.zhangchong.toolsapplication.Presenter;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
+import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
+import com.zhangchong.toolsapplication.Data.Bean.ExcelFileBean;
+import com.zhangchong.toolsapplication.Data.DAO.DaoEntry;
+import com.zhangchong.toolsapplication.Data.DAO.DaoEntrySchema;
 import com.zhangchong.toolsapplication.Data.SqlManager;
+
+import java.util.Collection;
 
 public class ToolsContentProvider extends ContentProvider {
     private SqlManager mSqlManager;
-
-    private static final int ALLPERSON=1;
-    private static final int PERSON=2;
-    private static final UriMatcher uriMatcher=new UriMatcher(UriMatcher.NO_MATCH);
-    static{
-
-        uriMatcher.addURI("com.tools.provider", "file", ALLPERSON);
-        uriMatcher.addURI("com.tools.provider", "person/#", PERSON);
-    }
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
-    public String getType(Uri uri) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 
     @Override
     public boolean onCreate() {
@@ -41,14 +26,160 @@ public class ToolsContentProvider extends ContentProvider {
     }
 
     @Override
+    public String getType(Uri uri) {
+        //TODO explicit intent
+        return null;
+    }
+
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        int match = ToolsUri.URI_MATCHER.match(uri);
+        long id = -1;
+        Uri rowUri = null;
+        switch (match){
+            case ToolsUri.ExcelUri.EXCEL_FILE:
+                //TODO twice object convert to values, need optimize
+                id = ExcelFileBean.schema.insertOrReplace(mSqlManager.getWritableDatabase(),
+                        ToolsUri.ExcelFileColumn.parseContentValues(values));
+                rowUri = ContentUris.withAppendedId(ToolsUri.ExcelFileColumn.CONTENT_URI,
+                        id);
+                break;
+            case ToolsUri.ExcelUri.EXCEL_CELL:
+                id = ExcelCellBean.schema.insertOrReplace(mSqlManager.getWritableDatabase(),
+                        ExcelCellBean.schema.valuesToObject(values, new ExcelCellBean()));
+                rowUri = ContentUris.withAppendedId(ToolsUri.ExcelCellColumn.CONTENT_URI,
+                        id);
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        if (id > 0){
+            getContext().getContentResolver().notifyChange(rowUri, null);
+            return rowUri;
+        }
+        return rowUri;
+    }
+
+    private void insertOrReplace(SQLiteDatabase db, ContentValues[] values, DaoEntrySchema schema) {
+        if (values == null)
+            return;
+
+        for (ContentValues entry : values) {
+            if(entry == null)
+                continue;
+            if (entry.getAsInteger(BaseColumns._ID) == 0) {
+                entry.remove("_id");
+            }
+            long id = db.replace(schema.getTableName() , "_id", entry);
+            entry.put(BaseColumns._ID, id);
+        }
+    }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        int match = ToolsUri.URI_MATCHER.match(uri);
+        int count = 0;
+        SQLiteDatabase db = mSqlManager.getWritableDatabase();
+        switch (match){
+            case ToolsUri.ExcelUri.EXCEL_FILE: {
+                db.beginTransaction();
+                try {
+                    insertOrReplace(db, values, ExcelFileBean.schema);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+                break;
+            case ToolsUri.ExcelUri.EXCEL_CELL: {
+                db.beginTransaction();
+                try {
+                    insertOrReplace(db, values, ExcelCellBean.schema);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
+    }
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        int match = ToolsUri.URI_MATCHER.match(uri);
+        int count = 0;
+        switch (match){
+            case ToolsUri.ExcelUri.EXCEL_FILE:
+                count = ExcelFileBean.schema.delete(mSqlManager.getWritableDatabase(), selection, selectionArgs);
+                break;
+            case ToolsUri.ExcelUri.EXCEL_FILE_ID: {
+                long id = ContentUris.parseId(uri);
+                count = ExcelFileBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
+            }
+                break;
+            case ToolsUri.ExcelUri.EXCEL_CELL:
+                count = ExcelCellBean.schema.delete(mSqlManager.getWritableDatabase(), selection, selectionArgs);
+                break;
+            case ToolsUri.ExcelUri.EXCEL_CELL_ID:{
+                long id = ContentUris.parseId(uri);
+                count = ExcelCellBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
+            }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+        return count;
+    }
+
+    @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        int match = ToolsUri.URI_MATCHER.match(uri);
+        switch (match){
+            case ToolsUri.ExcelUri.EXCEL_FILE:
+                return ExcelFileBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
+            case ToolsUri.ExcelUri.EXCEL_FILE_ID:
+                return ExcelFileBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
+            case ToolsUri.ExcelUri.EXCEL_CELL:
+                return ExcelCellBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
+            case ToolsUri.ExcelUri.EXCEL_CELL_ID:
+                return ExcelCellBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        int match = ToolsUri.URI_MATCHER.match(uri);
+        int count = 0;
+        switch (match){
+            case ToolsUri.ExcelUri.EXCEL_FILE:
+                count = ExcelFileBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
+                break;
+            case ToolsUri.ExcelUri.EXCEL_FILE_ID: {
+                long id = ContentUris.parseId(uri);
+                count = ExcelFileBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
+            }
+            break;
+            case ToolsUri.ExcelUri.EXCEL_CELL:
+                count = ExcelCellBean.schema.delete(mSqlManager.getWritableDatabase(), selection, selectionArgs);
+                break;
+            case ToolsUri.ExcelUri.EXCEL_CELL_ID:{
+                long id = ContentUris.parseId(uri);
+                count = ExcelCellBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
+            }
+            break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+        return count;
     }
+
+
 }

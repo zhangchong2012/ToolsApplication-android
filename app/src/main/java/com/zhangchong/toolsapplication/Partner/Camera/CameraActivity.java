@@ -1,4 +1,4 @@
-package com.zhangchong.toolsapplication.View.Activity;
+package com.zhangchong.toolsapplication.Partner.Camera;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,16 +10,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.zhangchong.toolsapplication.R;
-import com.zhangchong.toolsapplication.View.Controller.CameraManager;
 
 public class CameraActivity extends ActionBarActivity {
     public static final String TAG = CameraActivity.class.getSimpleName();
 
     private SurfaceView mCameraView;
-    private CameraViewCallback mCameraViewCallback;
     private CameraManager mCameraManager;
 
-    private boolean mHasSurfaceView;
+
 
     public static Intent newIntent(Context context){
         Intent intent = new Intent(context, CameraActivity.class);
@@ -62,9 +60,8 @@ public class CameraActivity extends ActionBarActivity {
 
     private void initViews(){
         mCameraView = (SurfaceView)findViewById(R.id.camera_view);
-        mCameraViewCallback = new CameraViewCallback();
-        mCameraView.getHolder().addCallback(mCameraViewCallback);
-        mCameraView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mCameraManager.initCameraManager(mCameraView);
+
     }
 
     @Override
@@ -90,27 +87,5 @@ public class CameraActivity extends ActionBarActivity {
     }
 
 
-    class CameraViewCallback implements SurfaceHolder.Callback {
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-            if(!mHasSurfaceView){
-                mHasSurfaceView = true;
-                try{
-                    mCameraManager.initCamera(holder);
-                }catch (Exception e){
-                    mHasSurfaceView = false;
-                }
-            }
-        }
 
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            mHasSurfaceView = false;
-        }
-    }
 }

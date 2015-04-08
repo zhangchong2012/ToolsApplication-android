@@ -35,7 +35,7 @@
         </provider>
 
         <activity
-            android:name=".View.Activity.CameraActivity"
+            android:name=".Partner.Camera.CameraActivity"
             android:label="@string/title_activity_camera" >
         </activity>
     </application>

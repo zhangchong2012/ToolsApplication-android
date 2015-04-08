@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.zhangchong.toolsapplication.R;
 import com.zhangchong.toolsapplication.Utils.LogHelper;
+import com.zhangchong.toolsapplication.Utils.SampleCode;
 import com.zhangchong.toolsapplication.View.Controller.GuideController;
 import com.zhangchong.toolsapplication.View.Controller.IController;
 import com.zhangchong.toolsapplication.View.Fragment.GuideFragment;
@@ -83,10 +84,16 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
         GuideController guideController = (GuideController)mController;
         switch (position){
             case 0:
-                guideController.testCreateXls("test.xls");
+                SampleCode.testCreateXls(this, "test.xls");
                 break;
             case 1:
-                startActivity(CameraActivity.newIntent(this));
+                SampleCode.testContentProvider(this);
+                break;
+            case 2:
+                SampleCode.testContentUpdateProvider(this);
+                break;
+            case 3:
+                SampleCode.testContentQueryProvider(this);
                 break;
             default:
                 break;

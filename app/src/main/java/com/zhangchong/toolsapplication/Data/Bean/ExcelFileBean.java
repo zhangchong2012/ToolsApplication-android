@@ -9,7 +9,7 @@ import com.zhangchong.toolsapplication.Data.DAO.DaoEntry;
  */
 @DaoEntry.Table(value = "excel_file")
 public class ExcelFileBean extends DaoBean {
-    public static DaoBeanSchema schema = new DaoBeanSchema(DaoBean.class);
+    public static DaoBeanSchema schema = new DaoBeanSchema(ExcelFileBean.class);
     public static final int TYPE_FILE = 0;
     public static final int TYPE_SHEET = 1;
     @Override
@@ -17,10 +17,10 @@ public class ExcelFileBean extends DaoBean {
         return schema;
     }
 
-    public interface Columns extends DaoEntry.Columns {
+    public static interface Columns extends DaoEntry.Columns {
         public static final String excel_name_file = "file";
         public static final String excel_name_sheet = "sheet";
-        public static final String excel_name_sheet_index = "index";
+        public static final String excel_name_sheet_index = "sheet_index";
         public static final String excel_name_type = "type";
     }
 
@@ -29,7 +29,7 @@ public class ExcelFileBean extends DaoBean {
     @Column(value = Columns.excel_name_sheet)
     private String sheetName;
     @Column(value = Columns.excel_name_sheet_index)
-    private String sheetIndex;
+    private int sheetIndex;
     @Column(value = Columns.excel_name_type)
     private int type;
 
@@ -59,11 +59,11 @@ public class ExcelFileBean extends DaoBean {
     }
 
 
-    public String getSheetIndex() {
+    public int getSheetIndex() {
         return sheetIndex;
     }
 
-    public void setSheetIndex(String sheetIndex) {
+    public void setSheetIndex(int sheetIndex) {
         this.sheetIndex = sheetIndex;
     }
 }

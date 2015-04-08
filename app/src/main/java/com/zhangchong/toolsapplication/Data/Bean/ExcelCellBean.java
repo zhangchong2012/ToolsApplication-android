@@ -7,14 +7,15 @@ import com.zhangchong.toolsapplication.Data.DAO.DaoEntry;
 /**
  * Created by TangGe on 2015/4/7.
  */
+@DaoEntry.Table(value = "excel_cell")
 public class ExcelCellBean extends DaoBean{
-    public static DaoBeanSchema schema = new DaoBeanSchema(DaoBean.class);
+    public static DaoBeanSchema schema = new DaoBeanSchema(ExcelCellBean.class);
     @Override
     protected DaoBeanSchema getSchema() {
         return schema;
     }
 
-    public interface Columns extends DaoEntry.Columns {
+    public static interface Columns extends DaoEntry.Columns {
         public static final String cell_row = "row";
         public static final String cell_col = "col";
         public static final String cell_content = "content";

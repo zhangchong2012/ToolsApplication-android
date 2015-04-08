@@ -8,6 +8,8 @@
     <string-array name="name_tools">
         <item>xls</item>
         <item>qrcode</item>
+        <item>test1</item>
+        <item>test2</item>
     </string-array>
 
     <string name="title_activity_camera">CameraActivity</string>
