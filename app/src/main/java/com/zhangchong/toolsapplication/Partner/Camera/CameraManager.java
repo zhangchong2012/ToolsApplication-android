@@ -3,6 +3,7 @@ package com.zhangchong.toolsapplication.Partner.Camera;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.text.TextUtils;
@@ -46,22 +47,43 @@ public class CameraManager {
     }
 
 
+    public void onResume() {
+
+    }
+
+    public void onStart() {
+
+
+    }
+
+    public void onPause() {
+
+    }
+
+    public void onDestroy() {
+        if (mCamera != null) {
+            mCamera.stopPreview();//停止预览
+            mCamera.release();//释放相机资源
+            mCamera = null;
+        }
+    }
+
     //初始化相机
     private boolean initCameraHolder(SurfaceHolder surfaceHolder) throws IOException {
         mCamera = openCamera();
         if (mCamera == null)
             return false;
         mCamera.setPreviewDisplay(surfaceHolder);
+        initCameraParams(mCamera);
         mCamera.startPreview();
-        optimizeCamera(mCamera);
         return true;
     }
 
 
-    private void optimizeCamera(Camera camera) {
+    private void initCameraParams(Camera camera) {
         if (!initialized) {
             initialized = true;
-            mCameraConfig.initFromCamera(mCamera);
+            mCameraConfig.initConfigFromCamera(mCamera);
             mCameraConfig.prepareCameraParam(mCamera);
         }
     }
@@ -130,13 +152,8 @@ public class CameraManager {
         }
 
 
-        public void initFromCamera(Camera camera) {
-            Camera.Parameters parameters = camera.getParameters();
-            WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-            Display display = manager.getDefaultDisplay();
-            int width = display.getWidth();
-            int height = display.getHeight();
-            cameraBestScreen = findBestPreviewSizeValue(parameters, width, height);
+        public void initConfigFromCamera(Camera camera) {
+
         }
 
         private Point findBestPreviewSizeValue(Camera.Parameters parameters, int w, int h) {
@@ -149,8 +166,8 @@ public class CameraManager {
                 int realWidth = supportedPreviewSize.width;
                 int realHeight = supportedPreviewSize.height;
                 boolean isCandidatePortrait = realWidth < realHeight;
-                int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
-                int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
+                int maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight;
+                int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
                 if (maybeFlippedWidth == w && maybeFlippedHeight == h) {
                     Point exactPoint = new Point(realWidth, realHeight);
                     return exactPoint;
@@ -173,17 +190,24 @@ public class CameraManager {
 
 
         public void prepareCameraParam(Camera camera) {
+            //camera pix
             Camera.Parameters parameters = camera.getParameters();
+            WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+            Display display = manager.getDefaultDisplay();
+            int width = display.getWidth();
+            int height = display.getHeight();
+            cameraBestScreen = findBestPreviewSizeValue(parameters, width, height);
+
             //orientation
-            int orientation =  CameraPreference.getInstance(mContext).getCameraSettingOrientation();
+            int orientation = CameraPreference.getInstance(mContext).getCameraSettingOrientation();
             camera.setDisplayOrientation(orientation);
 
-            //1.flash light
+            //flash light
             boolean openFlash = CameraPreference.getInstance(mContext).getCameraSettingFlash();
-            String torchMode = doSetTorch(parameters,openFlash);
+            String torchMode = doSetTorch(parameters, openFlash);
             parameters.setFlashMode(torchMode);
 
-            //2.auto focus
+            //auto focus
             String focus = getBestFocus(parameters);
             if (!TextUtils.isEmpty(focus)) {
                 parameters.setFocusMode(focus);
@@ -195,7 +219,7 @@ public class CameraManager {
                 parameters.setColorEffect(colorMode);
             }
             parameters.setPreviewSize(cameraBestScreen.x, cameraBestScreen.y);
-
+            parameters.setPictureFormat(PixelFormat.JPEG);
             camera.setParameters(parameters);
         }
 
@@ -250,8 +274,9 @@ public class CameraManager {
         private SharedPreferences mPreferences;
 
         private static CameraPreference cameraPreference;
-        public static CameraPreference getInstance(Context context){
-            if(cameraPreference == null)
+
+        public static CameraPreference getInstance(Context context) {
+            if (cameraPreference == null)
                 cameraPreference = new CameraPreference(context);
             return cameraPreference;
         }
@@ -260,19 +285,19 @@ public class CameraManager {
             mPreferences = context.getSharedPreferences(PREFERENCE_CAMERA, 0);
         }
 
-        public boolean getCameraSettingFlash(){
+        public boolean getCameraSettingFlash() {
             return mPreferences.getBoolean(PREFERENCE_FLASH, false);
         }
 
-        public void setCameraSettingFlash(boolean flash){
+        public void setCameraSettingFlash(boolean flash) {
             mPreferences.edit().putBoolean(PREFERENCE_FLASH, false).commit();
         }
 
-        public int getCameraSettingOrientation(){
+        public int getCameraSettingOrientation() {
             return mPreferences.getInt(PREFERENCE_FLASH, 90);
         }
 
-        public void setCameraSettingOrientation(int degree){
+        public void setCameraSettingOrientation(int degree) {
             mPreferences.edit().putInt(PREFERENCE_FLASH, degree).commit();
         }
     }
@@ -297,9 +322,6 @@ public class CameraManager {
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             mHasSurfaceView = false;
-            mCamera.stopPreview();//停止预览
-            mCamera.release();//释放相机资源
-            mCamera = null;
         }
     }
 }

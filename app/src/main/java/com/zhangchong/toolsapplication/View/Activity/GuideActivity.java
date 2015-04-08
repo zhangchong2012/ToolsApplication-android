@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.zhangchong.toolsapplication.Partner.Camera.CameraActivity;
 import com.zhangchong.toolsapplication.R;
 import com.zhangchong.toolsapplication.Utils.LogHelper;
 import com.zhangchong.toolsapplication.Utils.SampleCode;
@@ -87,7 +88,8 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                 SampleCode.testCreateXls(this, "test.xls");
                 break;
             case 1:
-                SampleCode.testContentProvider(this);
+                startActivity(CameraActivity.newIntent(this));
+//                SampleCode.testContentProvider(this);
                 break;
             case 2:
                 SampleCode.testContentUpdateProvider(this);
