@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.zhangchong.toolsapplication.R;
@@ -60,7 +59,7 @@ public class CameraActivity extends ActionBarActivity {
 
     private void initViews(){
         mCameraView = (SurfaceView)findViewById(R.id.camera_view);
-        mCameraManager.initCameraManager(mCameraView);
+        mCameraManager.initCameraSurface(mCameraView);
     }
 
     @Override
