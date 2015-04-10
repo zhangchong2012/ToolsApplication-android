@@ -4,14 +4,15 @@ import com.zhangchong.toolsapplication.Data.DAO.DaoBean;
 import com.zhangchong.toolsapplication.Data.DAO.DaoBeanSchema;
 import com.zhangchong.toolsapplication.Data.DAO.DaoEntry;
 
+import java.util.List;
+
 /**
  * Created by TangGe on 2015/4/7.
  */
 @DaoEntry.Table(value = "excel_sheet")
 public class ExcelSheetBean extends DaoBean {
     public static DaoBeanSchema schema = new DaoBeanSchema(ExcelSheetBean.class);
-    public static final int TYPE_FILE = 0;
-    public static final int TYPE_SHEET = 1;
+
     @Override
     protected DaoBeanSchema getSchema() {
         return schema;
@@ -30,6 +31,8 @@ public class ExcelSheetBean extends DaoBean {
     @Column(value = Columns.excel_name_sheet_index)
     private int sheetIndex;
 
+
+    private List<ExcelCellBean> cellBeans;
 
     public int getFileId() {
         return fileId;
@@ -53,5 +56,13 @@ public class ExcelSheetBean extends DaoBean {
 
     public void setSheetIndex(int sheetIndex) {
         this.sheetIndex = sheetIndex;
+    }
+
+    public List<ExcelCellBean> getCellBeans() {
+        return cellBeans;
+    }
+
+    public void setCellBeans(List<ExcelCellBean> cellBeans) {
+        this.cellBeans = cellBeans;
     }
 }
