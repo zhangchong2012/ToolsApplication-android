@@ -1,7 +1,7 @@
 package com.zhangchong.toolsapplication.Partner.Excel;
 
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
-import com.zhangchong.toolsapplication.Data.Bean.ExcelFileBean;
+import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 
 import java.util.List;
 
@@ -23,14 +23,10 @@ public class ExcelBean {
         private String content;
     }
 
-    public static ExcelBean convertToExcelBean(List<ExcelFileBean> fileBeans, List<ExcelCellBean> cellBeans){
+    public static ExcelBean convertToExcelBean(List<ExcelSheetBean> fileBeans, List<ExcelCellBean> cellBeans){
         ExcelBean excel = null;
         for (int i = 0; i < fileBeans.size(); i++) {
-            ExcelFileBean bean = fileBeans.get(i);
-            if(bean.getType() == ExcelFileBean.TYPE_FILE && excel == null){
-                excel = new ExcelBean();
-                continue;
-            }
+            ExcelSheetBean bean = fileBeans.get(i);
 
         }
         return excel;

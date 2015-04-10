@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
-import com.zhangchong.toolsapplication.Data.Bean.ExcelFileBean;
+import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 import com.zhangchong.toolsapplication.Data.DAO.DaoEntrySchema;
 
 /**
@@ -16,7 +16,7 @@ public class SqlManager extends SQLiteOpenHelper{
     private static final int DB_VERSION = 1;
 
     private static final DaoEntrySchema[] initTables = {
-            ExcelFileBean.schema,
+            ExcelSheetBean.schema,
             ExcelCellBean.schema
     };
 

@@ -5,4 +5,9 @@
 
     <dimen name="common_padding">14dp</dimen>
     <dimen name="common_height">48dp</dimen>
+
+
+    <!--QRDecode-->
+    <dimen name="qr_surface_w">240dp</dimen>
+    <dimen name="qr_surface_h">240dp</dimen>
 </resources>

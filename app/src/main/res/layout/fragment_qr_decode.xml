@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <SurfaceView
+        android:id="@+id/decode_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.zhangchong.toolsapplication.Partner.Camera.QRDecode.ZxingCode.ViewfinderView xmlns:scanview="http://schemas.android.com/apk/res/com.zhangchong.toolsapplication"
+        android:id="@+id/decode_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        scanview:laserColor="@color/viewfinder_laser"
+        scanview:maskColor="@color/viewfinder_mask"
+        scanview:resultColor="@color/result_view"
+        scanview:resultPointColor="@color/possible_result_points"
+        scanview:scanHeight="@dimen/qr_surface_h"
+        scanview:scanWidth="@dimen/qr_surface_w" />
+</FrameLayout>

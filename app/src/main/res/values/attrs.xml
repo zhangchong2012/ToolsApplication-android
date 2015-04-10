@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="qrScanView">
+        <attr name="scanWidth" format="dimension" />
+        <attr name="scanHeight" format="dimension" />
+        <attr name="maskColor" format="color" />
+        <attr name="resultColor" format="color" />
+        <attr name="laserColor" format="color" />
+        <attr name="resultPointColor" format="color" />
+    </declare-styleable>
+</resources>

@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
-import com.zhangchong.toolsapplication.Data.Bean.ExcelFileBean;
+import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 
 /**
  * Created by TangGe on 2015/4/8.
@@ -37,23 +37,22 @@ public class ToolsUri {
     public  static  class ExcelFileColumn implements BaseColumns{
         public static final Uri CONTENT_URI = Uri.parse("content://" + LEGACY_AUTHORITY + "/" + EXCEL_FILE);
         // 表数据列
-        public static final String  FILE_TYPE = ExcelFileBean.Columns.excel_name_type;
-        public static final String  FILE_NAME = ExcelFileBean.Columns.excel_name_file;
-        public static final String  SHEET_NAME = ExcelFileBean.Columns.excel_name_sheet;
-        public static final String  SHEET_INDEX = ExcelFileBean.Columns.excel_name_sheet_index;
+        public static final String PARENT_FILE_ID = ExcelSheetBean.Columns.excel_file_id;
+        public static final String  SHEET_NAME = ExcelSheetBean.Columns.excel_name_sheet;
+        public static final String  SHEET_INDEX = ExcelSheetBean.Columns.excel_name_sheet_index;
 
-        public static ExcelFileBean parseContentValues(ContentValues values){
+        public static ExcelSheetBean parseContentValues(ContentValues values){
             if(values == null)
                 return null;
-            ExcelFileBean bean = new ExcelFileBean();
-            return  ExcelFileBean.schema.valuesToObject(values, bean);
+            ExcelSheetBean bean = new ExcelSheetBean();
+            return  ExcelSheetBean.schema.valuesToObject(values, bean);
         }
 
-        public static ContentValues parseExcelFileBean(ExcelFileBean bean){
+        public static ContentValues parseExcelFileBean(ExcelSheetBean bean){
             if(bean == null)
                 return null;
             ContentValues values = new ContentValues();
-            ExcelFileBean.schema.objectToValues(bean, values);
+            ExcelSheetBean.schema.objectToValues(bean, values);
             return values;
         }
     }

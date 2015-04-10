@@ -3,6 +3,7 @@ package com.zhangchong.toolsapplication.Partner.Camera.Config;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.text.TextUtils;
 import android.view.Display;
@@ -16,10 +17,18 @@ import java.util.List;
  */
 public class CameraConfig {
     private Context mContext;
-    private Point cameraBestScreen;
+    private Point cameraBestPreviewSize;
+    private Point cameraBestPictureSize;
 
     public CameraConfig(Context context) {
         this.mContext = context;
+    }
+
+    public Point getCameraBestPreviewSize(){
+        return cameraBestPreviewSize;
+    }
+    public Point getCameraBestPictureSize(){
+        return cameraBestPictureSize;
     }
 
     private Point findBestPreviewSizeValue(Camera.Parameters parameters, int w, int h) {
@@ -54,6 +63,38 @@ public class CameraConfig {
         return bestSize;
     }
 
+    private Point findBestPictureSizeValue(Camera.Parameters parameters, int w, int h) {
+        List<Camera.Size> rawSupportedSizes = parameters.getSupportedPictureSizes();
+        Point bestSize = null;
+        float screenAspectRatio = (float) w / (float) h;
+
+        float diff = Float.POSITIVE_INFINITY;
+        for (Camera.Size supportedPreviewSize : rawSupportedSizes) {
+            int realWidth = supportedPreviewSize.width;
+            int realHeight = supportedPreviewSize.height;
+            boolean isCandidatePortrait = realWidth < realHeight;
+            int maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight;
+            int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
+            if (maybeFlippedWidth == w && maybeFlippedHeight == h) {
+                Point exactPoint = new Point(realWidth, realHeight);
+                return exactPoint;
+            }
+            float aspectRatio = (float) maybeFlippedWidth / (float) maybeFlippedHeight;
+            float newDiff = Math.abs(aspectRatio - screenAspectRatio);
+            if (newDiff < diff) {
+                bestSize = new Point(realWidth, realHeight);
+                diff = newDiff;
+            }
+        }
+
+        if (bestSize == null) {
+            Camera.Size defaultSize = parameters.getPictureSize();
+            bestSize = new Point(defaultSize.width, defaultSize.height);
+        }
+
+        return bestSize;
+    }
+
 
     public void prepareCameraParam(Camera camera) {
         //camera pix
@@ -62,7 +103,9 @@ public class CameraConfig {
         Display display = manager.getDefaultDisplay();
         int width = display.getWidth();
         int height = display.getHeight();
-        cameraBestScreen = findBestPreviewSizeValue(parameters, width, height);
+
+        cameraBestPreviewSize = findBestPreviewSizeValue(parameters, width, height);
+        cameraBestPictureSize = findBestPictureSizeValue(parameters, width, height);
 
         //orientation
         int orientation = CameraPreference.getInstance(mContext).getCameraSettingOrientation();
@@ -84,7 +127,9 @@ public class CameraConfig {
         if (colorMode != null) {
             parameters.setColorEffect(colorMode);
         }
-        parameters.setPreviewSize(cameraBestScreen.x, cameraBestScreen.y);
+        parameters.setPreviewSize(cameraBestPreviewSize.x, cameraBestPreviewSize.y);
+        parameters.setPictureSize(cameraBestPictureSize.x, cameraBestPictureSize.y);
+
         parameters.setPictureFormat(PixelFormat.JPEG);
         camera.setParameters(parameters);
     }

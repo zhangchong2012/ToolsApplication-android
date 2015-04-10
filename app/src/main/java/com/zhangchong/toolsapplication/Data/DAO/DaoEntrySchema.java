@@ -7,8 +7,6 @@ import android.text.TextUtils;
 
 import com.zhangchong.toolsapplication.Utils.LogHelper;
 
-import org.w3c.dom.Text;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

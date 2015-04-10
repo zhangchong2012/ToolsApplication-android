@@ -9,12 +9,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
-import com.zhangchong.toolsapplication.Data.Bean.ExcelFileBean;
-import com.zhangchong.toolsapplication.Data.DAO.DaoEntry;
+import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 import com.zhangchong.toolsapplication.Data.DAO.DaoEntrySchema;
 import com.zhangchong.toolsapplication.Data.SqlManager;
-
-import java.util.Collection;
 
 public class ToolsContentProvider extends ContentProvider {
     private SqlManager mSqlManager;
@@ -39,7 +36,7 @@ public class ToolsContentProvider extends ContentProvider {
         switch (match){
             case ToolsUri.ExcelUri.EXCEL_FILE:
                 //TODO twice object convert to values, need optimize
-                id = ExcelFileBean.schema.insertOrReplace(mSqlManager.getWritableDatabase(),
+                id = ExcelSheetBean.schema.insertOrReplace(mSqlManager.getWritableDatabase(),
                         ToolsUri.ExcelFileColumn.parseContentValues(values));
                 rowUri = ContentUris.withAppendedId(ToolsUri.ExcelFileColumn.CONTENT_URI,
                         id);
@@ -84,7 +81,7 @@ public class ToolsContentProvider extends ContentProvider {
             case ToolsUri.ExcelUri.EXCEL_FILE: {
                 db.beginTransaction();
                 try {
-                    insertOrReplace(db, values, ExcelFileBean.schema);
+                    insertOrReplace(db, values, ExcelSheetBean.schema);
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
@@ -114,11 +111,11 @@ public class ToolsContentProvider extends ContentProvider {
         int count = 0;
         switch (match){
             case ToolsUri.ExcelUri.EXCEL_FILE:
-                count = ExcelFileBean.schema.delete(mSqlManager.getWritableDatabase(), selection, selectionArgs);
+                count = ExcelSheetBean.schema.delete(mSqlManager.getWritableDatabase(), selection, selectionArgs);
                 break;
             case ToolsUri.ExcelUri.EXCEL_FILE_ID: {
                 long id = ContentUris.parseId(uri);
-                count = ExcelFileBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
+                count = ExcelSheetBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
             }
                 break;
             case ToolsUri.ExcelUri.EXCEL_CELL:
@@ -141,9 +138,9 @@ public class ToolsContentProvider extends ContentProvider {
         int match = ToolsUri.URI_MATCHER.match(uri);
         switch (match){
             case ToolsUri.ExcelUri.EXCEL_FILE:
-                return ExcelFileBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
+                return ExcelSheetBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
             case ToolsUri.ExcelUri.EXCEL_FILE_ID:
-                return ExcelFileBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
+                return ExcelSheetBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
             case ToolsUri.ExcelUri.EXCEL_CELL:
                 return ExcelCellBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
             case ToolsUri.ExcelUri.EXCEL_CELL_ID:
@@ -160,11 +157,11 @@ public class ToolsContentProvider extends ContentProvider {
         int count = 0;
         switch (match){
             case ToolsUri.ExcelUri.EXCEL_FILE:
-                count = ExcelFileBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
+                count = ExcelSheetBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
                 break;
             case ToolsUri.ExcelUri.EXCEL_FILE_ID: {
                 long id = ContentUris.parseId(uri);
-                count = ExcelFileBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
+                count = ExcelSheetBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
             }
             break;
             case ToolsUri.ExcelUri.EXCEL_CELL:

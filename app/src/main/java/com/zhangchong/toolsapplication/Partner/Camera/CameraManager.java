@@ -26,8 +26,18 @@ public class CameraManager {
     private Camera mCamera;
     private CameraConfig mCameraConfig;
 
+    private static CameraManager manager;
+    public static CameraManager getCameraManager(){
+        return manager;
+    }
 
-    public CameraManager(Context context) {
+    public static synchronized CameraManager  getCameraManager(Context context){
+        if(manager == null)
+            manager = new CameraManager(context);
+        return manager;
+    }
+
+    private CameraManager(Context context) {
         mContext = context;
         mCameraConfig = new CameraConfig(context);
     }
@@ -41,7 +51,6 @@ public class CameraManager {
         surfaceView.getHolder().addCallback(mCameraViewCallback);
         surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
-
 
     public void onResume() {
 
@@ -58,6 +67,10 @@ public class CameraManager {
 
     public void onDestroy() {
         releaseCamera();
+    }
+
+    public CameraConfig getCameraConfig(){
+        return mCameraConfig;
     }
 
     //切换摄像头的时候要释放之前的设备
@@ -85,6 +98,10 @@ public class CameraManager {
 
     public boolean isOpen() {
         return mCamera != null;
+    }
+
+    public Camera getCamera(){
+        return mCamera;
     }
 
     public boolean checkCameraHardware(Context context) {
@@ -131,4 +148,5 @@ public class CameraManager {
         }
         return c;
     }
+
 }

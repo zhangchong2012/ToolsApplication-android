@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.zhangchong.toolsapplication.Data.Bean.ExcelFileBean;
+import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 import com.zhangchong.toolsapplication.Presenter.ApplicationPresenter;
 import com.zhangchong.toolsapplication.Presenter.ToolsUri;
 import com.zhangchong.toolsapplication.View.Activity.GuideActivity;
@@ -33,20 +33,20 @@ public class SampleCode {
         ContentResolver resolver = context.getContentResolver();
         ArrayList<ContentValues> list = new ArrayList();
         ContentValues values = new ContentValues();
-        ExcelFileBean bean = new ExcelFileBean();
-        bean.setType(ExcelFileBean.TYPE_FILE);
-        bean.setFileName("test_file");
-        ExcelFileBean.schema.objectToValues(bean, values);
+        ExcelSheetBean bean = new ExcelSheetBean();
+//        bean.setType(ExcelSheetBean.TYPE_FILE);
+//        bean.setFileName("test_file");
+        ExcelSheetBean.schema.objectToValues(bean, values);
         list.add(values);
 
         for (int i = 0; i < 10; ++i){
             ContentValues temp = new ContentValues();
-            ExcelFileBean bean1 =  new ExcelFileBean();
-            bean.setFileName(bean.getFileName());
+            ExcelSheetBean bean1 =  new ExcelSheetBean();
+//            bean.setFileName(bean.getFileName());
             bean.setSheetIndex(i);
-            bean.setType(ExcelFileBean.TYPE_SHEET);
-            bean.setFileName("sheet" + i);
-            ExcelFileBean.schema.objectToValues(bean, temp);
+//            bean.setType(ExcelSheetBean.TYPE_SHEET);
+//            bean.setFileName("sheet" + i);
+            ExcelSheetBean.schema.objectToValues(bean, temp);
 //            resolver.insert(ToolsUri.ExcelFileColumn.CONTENT_URI, values);
             list.add(temp);
         }
@@ -58,12 +58,12 @@ public class SampleCode {
     public static void testContentUpdateProvider(Context context){
         ContentResolver resolver = context.getContentResolver();
         ContentValues temp = new ContentValues();
-        ExcelFileBean bean =  new ExcelFileBean();
-        bean.setFileName(bean.getFileName());
+        ExcelSheetBean bean =  new ExcelSheetBean();
+//        bean.setFileName(bean.getFileName());
         bean.setSheetIndex(50);
-        bean.setType(ExcelFileBean.TYPE_SHEET);
-        bean.setFileName("sheet" + 50);
-        ExcelFileBean.schema.objectToValues(bean, temp);
+//        bean.setType(ExcelSheetBean.TYPE_SHEET);
+//        bean.setFileName("sheet" + 50);
+        ExcelSheetBean.schema.objectToValues(bean, temp);
         temp.remove(ToolsUri.ExcelFileColumn._ID);//Warning must delete
         resolver.update(ToolsUri.ExcelFileColumn.CONTENT_URI, temp, "file = ?", new String[]{ "sheet0"});
     }
@@ -73,11 +73,11 @@ public class SampleCode {
         Cursor cursor= resolver.query(ToolsUri.ExcelFileColumn.CONTENT_URI, null, null, null, null);
         for(cursor.moveToFirst();!cursor.isAfterLast();cursor.moveToNext()){
             int id=cursor.getInt(cursor.getColumnIndex(ToolsUri.ExcelFileColumn._ID));
-            String name=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.FILE_NAME));
-            String type=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.FILE_TYPE));
+            String name=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.PARENT_FILE_ID));
+//            String type=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.FILE_TYPE));
             String sheet=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_NAME));
             String sheetindex=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_INDEX));
-            LogHelper.logD(GuideActivity.TAG, "id:" + id +", name:" + name + ", type:" + type +", sheet:" + sheet
+            LogHelper.logD(GuideActivity.TAG, "id:" + id +", name:" + name + ", sheet:" + sheet
                     + ", sheetindex:" + sheetindex);
         }
     }

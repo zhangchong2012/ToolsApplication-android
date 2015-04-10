@@ -8,7 +8,6 @@ import android.view.MenuItem;
 
 import com.zhangchong.toolsapplication.Partner.Camera.CameraActivity;
 import com.zhangchong.toolsapplication.R;
-import com.zhangchong.toolsapplication.Utils.LogHelper;
 import com.zhangchong.toolsapplication.Utils.SampleCode;
 import com.zhangchong.toolsapplication.View.Controller.GuideController;
 import com.zhangchong.toolsapplication.View.Controller.IController;
@@ -88,11 +87,12 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                 SampleCode.testCreateXls(this, "test.xls");
                 break;
             case 1:
-                startActivity(CameraActivity.newIntent(this));
+                startActivity(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_PHOTO));
 //                SampleCode.testContentProvider(this);
                 break;
             case 2:
-                SampleCode.testContentUpdateProvider(this);
+                startActivity(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_QR_CODE));
+//                SampleCode.testContentUpdateProvider(this);
                 break;
             case 3:
                 SampleCode.testContentQueryProvider(this);

@@ -3,10 +3,9 @@ package com.zhangchong.toolsapplication.Partner.Excel;
 import android.content.Context;
 
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
-import com.zhangchong.toolsapplication.Data.Bean.ExcelFileBean;
+import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 
 import java.io.File;
-import java.io.IOException;
 
 import jxl.Workbook;
 import jxl.write.WritableWorkbook;
@@ -24,15 +23,15 @@ public class ExcelManager {
     }
 
 
-    public void exportExcelFile(File file, ExcelFileBean fileBean, ExcelCellBean cellBean) throws Exception{
+    public void exportExcelFile(File file, ExcelSheetBean fileBean, ExcelCellBean cellBean) throws Exception{
         if(!file.exists())
             file.createNewFile();
         WritableWorkbook book  =  Workbook.createWorkbook(file);
     }
 
 
-    public ExcelFileBean getExcelFile(){
-        ExcelFileBean bean = null;
+    public ExcelSheetBean getExcelFile(){
+        ExcelSheetBean bean = null;
         return bean;
     }
 

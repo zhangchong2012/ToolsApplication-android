@@ -7,9 +7,9 @@ import com.zhangchong.toolsapplication.Data.DAO.DaoEntry;
 /**
  * Created by TangGe on 2015/4/7.
  */
-@DaoEntry.Table(value = "excel_file")
-public class ExcelFileBean extends DaoBean {
-    public static DaoBeanSchema schema = new DaoBeanSchema(ExcelFileBean.class);
+@DaoEntry.Table(value = "excel_sheet")
+public class ExcelSheetBean extends DaoBean {
+    public static DaoBeanSchema schema = new DaoBeanSchema(ExcelSheetBean.class);
     public static final int TYPE_FILE = 0;
     public static final int TYPE_SHEET = 1;
     @Override
@@ -18,28 +18,25 @@ public class ExcelFileBean extends DaoBean {
     }
 
     public static interface Columns extends DaoEntry.Columns {
-        public static final String excel_name_file = "file";
-        public static final String excel_name_sheet = "sheet";
+        public static final String excel_file_id = "parent_id";
+        public static final String excel_name_sheet = "sheet_name";
         public static final String excel_name_sheet_index = "sheet_index";
-        public static final String excel_name_type = "type";
     }
 
-    @Column(value = Columns.excel_name_file)
-    private String fileName;
+    @Column(value = Columns.excel_file_id)
+    private int fileId;
     @Column(value = Columns.excel_name_sheet)
     private String sheetName;
     @Column(value = Columns.excel_name_sheet_index)
     private int sheetIndex;
-    @Column(value = Columns.excel_name_type)
-    private int type;
 
 
-    public String getFileName() {
-        return fileName;
+    public int getFileId() {
+        return fileId;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
     }
 
     public String getSheetName() {
@@ -49,15 +46,6 @@ public class ExcelFileBean extends DaoBean {
     public void setSheetName(String sheetName) {
         this.sheetName = sheetName;
     }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
 
     public int getSheetIndex() {
         return sheetIndex;
