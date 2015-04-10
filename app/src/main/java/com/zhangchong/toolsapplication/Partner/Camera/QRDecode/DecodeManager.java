@@ -13,14 +13,12 @@ import com.google.zxing.ResultPoint;
  */
 public class DecodeManager implements IDecodeCallback {
     private DecodeThread mDecodeTread;
-    private Handler mDecodeHandler;
     private Handler mStatusHandler;
     private Fragment mFragment;
     public DecodeManager(Fragment fragment, Handler statusHandler){
         mFragment = fragment;
         mDecodeTread = new DecodeThread(this);
         mDecodeTread.start();
-        mDecodeHandler = mDecodeTread.getHandler();
         mStatusHandler = statusHandler;
     }
 
@@ -30,12 +28,16 @@ public class DecodeManager implements IDecodeCallback {
 
     @Override
     public void callDecode(byte[] data, int w, int h) {
-        Message msg = mDecodeHandler.obtainMessage(DecodeThread.DecodeHandle.DECODE, w, h, data);
+        if(mDecodeTread.getHandler() == null)
+            return;
+        Message msg = mDecodeTread.getHandler().obtainMessage(DecodeThread.DecodeHandle.DECODE, w, h, data);
         msg.sendToTarget();
     }
 
     @Override
     public void CallDecodeStatus(int status, DecodeResult result) {
+        if(mStatusHandler == null)
+            return;
         int msgWhat = 0;
         switch (status){
             case IDecodeCallback.STATUS_OK:

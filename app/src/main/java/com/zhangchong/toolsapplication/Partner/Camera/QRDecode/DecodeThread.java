@@ -21,6 +21,7 @@ import com.zhangchong.toolsapplication.R;
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public class DecodeThread extends  Thread{
         decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
 
+        mHints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
         mHints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
         mHints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, decoder);
     }
@@ -93,6 +95,7 @@ public class DecodeThread extends  Thread{
 
         public DecodeHandle(IDecodeCallback callback, Map<DecodeHintType,Object> hints){
             reference = new WeakReference<IDecodeCallback>(callback);
+            multiFormatReader = new MultiFormatReader();
             multiFormatReader.setHints(hints);
         }
 
@@ -146,8 +149,13 @@ public class DecodeThread extends  Thread{
                 return null;
             }
             // Go ahead and assume it's YUV rather than die.
-            return new PlanarYUVLuminanceSource(data, width, height, previewRect.left, previewRect.top,
-                    previewRect.width(), previewRect.height(), false);
+            if(width > height){
+                return new PlanarYUVLuminanceSource(data, width, height,  previewRect.top, previewRect.left,
+                        previewRect.height(), previewRect.width(),  false);
+            }else{
+                return new PlanarYUVLuminanceSource(data, width, height, previewRect.left, previewRect.top,
+                        previewRect.width(), previewRect.height(), false);
+            }
         }
 
 

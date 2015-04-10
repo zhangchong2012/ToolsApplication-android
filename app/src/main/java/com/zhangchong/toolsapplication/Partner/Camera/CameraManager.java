@@ -22,9 +22,10 @@ public class CameraManager {
     private Context mContext;
 
     private SurfaceView mSurfaceView;
-    private CameraSurfaceCallback mCameraViewCallback;
+    private CameraSurfaceCallback mSurfaceViewCallback;
     private Camera mCamera;
     private CameraConfig mCameraConfig;
+    private Camera.PreviewCallback mPreviewCallback;
 
     private static CameraManager manager;
     public static CameraManager getCameraManager(){
@@ -47,9 +48,20 @@ public class CameraManager {
             throw new IllegalStateException("No SurfaceHolder provided");
         }
         mSurfaceView =surfaceView;
-        mCameraViewCallback = new CameraSurfaceCallback(this);
-        surfaceView.getHolder().addCallback(mCameraViewCallback);
+        mSurfaceViewCallback = new CameraSurfaceCallback(this);
+        surfaceView.getHolder().addCallback(mSurfaceViewCallback);
         surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
+
+    public void initCameraSurface(SurfaceView surfaceView, Camera.PreviewCallback callback) {
+        if (surfaceView == null) {
+            throw new IllegalStateException("No SurfaceHolder provided");
+        }
+        mSurfaceView =surfaceView;
+        mSurfaceViewCallback = new CameraSurfaceCallback(this);
+        surfaceView.getHolder().addCallback(mSurfaceViewCallback);
+        surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mPreviewCallback = callback;
     }
 
     public void onResume() {
@@ -92,6 +104,8 @@ public class CameraManager {
             return false;
         mCamera.setPreviewDisplay(surfaceHolder);
         mCameraConfig.prepareCameraParam(mCamera);
+        if(mPreviewCallback != null)
+            mCamera.setPreviewCallback(mPreviewCallback);
         mCamera.startPreview();
         return true;
     }

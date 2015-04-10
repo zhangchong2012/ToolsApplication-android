@@ -34,7 +34,7 @@ public class QrDecodeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHandler = new QrHandler(this);
-        mDecodeManager = new DecodeManager(getActivity(), mHandler);
+        mDecodeManager = new DecodeManager(this, mHandler);
     }
 
     @Override
@@ -48,7 +48,8 @@ public class QrDecodeFragment extends Fragment {
     private void initViews(View rootView){
         UIClick click = new UIClick();
         mCameraView = (SurfaceView)rootView.findViewById(R.id.decode_preview);
-        ((CameraActivity)getActivity()).getCameraManager().initCameraSurface(mCameraView);
+        ((CameraActivity)getActivity()).getCameraManager().initCameraSurface(mCameraView,
+                new CameraPreviewCallback(mDecodeManager));
         mMaskView = (ViewfinderView)rootView.findViewById(R.id.decode_mask);
     }
 

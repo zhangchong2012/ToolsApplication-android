@@ -19,7 +19,7 @@ public class CameraPreviewCallback implements Camera.PreviewCallback{
         CameraManager cameraManager = CameraManager.getCameraManager();
         if (cameraManager == null)
             return;
-        Point point = cameraManager.getCameraConfig().getCameraBestPictureSize();
+        Point point = cameraManager.getCameraConfig().getCameraBestPreviewSize();
         if(point == null)
             return;
         mDecodeCallback.callDecode(data, point.x, point.y);
