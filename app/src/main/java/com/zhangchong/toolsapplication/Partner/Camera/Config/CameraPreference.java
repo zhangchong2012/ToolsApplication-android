@@ -13,11 +13,16 @@ public class CameraPreference {
 
     private static CameraPreference cameraPreference;
 
-    public static CameraPreference getInstance(Context context) {
+    public static CameraPreference newInstance(Context context) {
         if (cameraPreference == null)
             cameraPreference = new CameraPreference(context);
         return cameraPreference;
     }
+
+    public static CameraPreference getInstance() {
+        return cameraPreference;
+    }
+
 
     private CameraPreference(Context context) {
         mPreferences = context.getSharedPreferences(PREFERENCE_CAMERA, 0);

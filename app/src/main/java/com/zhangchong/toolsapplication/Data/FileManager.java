@@ -1,9 +1,14 @@
 package com.zhangchong.toolsapplication.Data;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Zhangchong on 2015/4/4.
@@ -12,7 +17,18 @@ import java.io.File;
 public class FileManager {
     private String mCachePath = null;
 
-    public FileManager(Context context){
+    public  static FileManager instance;
+    public static FileManager newInstance(Context context){
+        if(instance == null)
+            instance = new FileManager(context);
+        return instance;
+    }
+
+    public static FileManager getInstance(){
+        return instance;
+    }
+
+    private FileManager(Context context){
         if(hasSDCard()){
             mCachePath = context.getExternalCacheDir().getAbsolutePath();
         }else{

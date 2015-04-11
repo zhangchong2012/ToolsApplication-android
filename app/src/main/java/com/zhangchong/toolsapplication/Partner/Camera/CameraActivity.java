@@ -2,6 +2,7 @@ package com.zhangchong.toolsapplication.Partner.Camera;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +12,7 @@ import com.zhangchong.toolsapplication.Partner.Camera.QRDecode.QrDecodeFragment;
 import com.zhangchong.toolsapplication.Partner.Camera.TakePhoto.TakePhotoFragment;
 import com.zhangchong.toolsapplication.R;
 
-public class CameraActivity extends ActionBarActivity {
+public class CameraActivity extends FragmentActivity {
     public static final String TAG = CameraActivity.class.getSimpleName();
     public static final String TYPE_CAMERA = "camera_type";
     public static final int TYPE_CAMERA_PHOTO = 0x001;

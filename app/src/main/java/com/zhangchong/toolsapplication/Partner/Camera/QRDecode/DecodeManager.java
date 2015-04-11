@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 
+import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
 /**
@@ -46,11 +47,13 @@ public class DecodeManager implements IDecodeCallback {
                 msgWhat = QrDecodeFragment.QrHandler.DECODE_FAILED;
         }
         Message msg = mStatusHandler.obtainMessage(msgWhat, result);
+//        msg.obj = result.rawResult.getText();
         msg.sendToTarget();
     }
 
     @Override
     public void foundPossibleResultPoint(ResultPoint point) {
+        ResultPoint temp = new ResultPoint(point.getY(), point.getX());
         Message msg = mStatusHandler.obtainMessage(QrDecodeFragment.QrHandler.DECODE_POSSIBLE, point);
         msg.sendToTarget();
     }

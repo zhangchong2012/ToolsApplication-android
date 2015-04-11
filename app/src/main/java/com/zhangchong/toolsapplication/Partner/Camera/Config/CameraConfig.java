@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.zhangchong.toolsapplication.Partner.Camera.CameraManager;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +21,17 @@ public class CameraConfig {
     private Point cameraBestPreviewSize;
     private Point cameraBestPictureSize;
 
-    public CameraConfig(Context context) {
+    static CameraConfig cameraConfig;
+    public static CameraConfig newInstance(Context context) {
+        if (cameraConfig == null)
+            cameraConfig = new CameraConfig(context);
+        return cameraConfig;
+    }
+
+    public static CameraConfig getInstance() {
+        return cameraConfig;
+    }
+    private CameraConfig(Context context) {
         this.mContext = context;
     }
 
@@ -107,11 +119,11 @@ public class CameraConfig {
         cameraBestPictureSize = findBestPictureSizeValue(parameters, width, height);
 
         //orientation
-        int orientation = CameraPreference.getInstance(mContext).getCameraSettingOrientation();
+        int orientation = CameraManager.getCameraManager().getCameraPreference().getCameraSettingOrientation();
         camera.setDisplayOrientation(orientation);
 
         //flash light
-        boolean openFlash = CameraPreference.getInstance(mContext).getCameraSettingFlash();
+        boolean openFlash = CameraManager.getCameraManager().getCameraPreference().getCameraSettingFlash();
         String torchMode = doSetTorch(parameters, openFlash);
         parameters.setFlashMode(torchMode);
 

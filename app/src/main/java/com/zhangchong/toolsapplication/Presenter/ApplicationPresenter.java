@@ -11,7 +11,7 @@ public class ApplicationPresenter {
     private FileManager mFileManager;
 
     public ApplicationPresenter(Context context){
-        mFileManager = new FileManager(context);
+        mFileManager = FileManager.newInstance(context);
     }
 
     public String getFilePath(String fileName){

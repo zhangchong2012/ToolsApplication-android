@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.zxing.ResultPoint;
 import com.zhangchong.toolsapplication.Partner.Camera.CameraActivity;
@@ -109,6 +110,8 @@ public class QrDecodeFragment extends Fragment {
                 case DECODE_FAILED:
                     break;
                 case DECODE_SUCCESS:
+//                    if(msg.obj != null)
+                        Toast.makeText(fragment.getActivity(), "parse ok !", Toast.LENGTH_SHORT);
                     break;
                 case DECODE_POSSIBLE: {
                     if (msg.obj != null){

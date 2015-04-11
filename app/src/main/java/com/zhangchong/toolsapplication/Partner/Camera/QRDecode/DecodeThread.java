@@ -15,8 +15,12 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
+import com.zhangchong.toolsapplication.Data.FileManager;
+import com.zhangchong.toolsapplication.Partner.Camera.CameraManager;
+import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
 import com.zhangchong.toolsapplication.Partner.Camera.QRDecode.ZxingCode.DecodeFormatManager;
 import com.zhangchong.toolsapplication.R;
+import com.zhangchong.toolsapplication.Utils.LogHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
@@ -119,9 +123,14 @@ public class DecodeThread extends  Thread{
         }
 
         private void decode(byte[] data, int width, int height, IDecodeCallback callback) {
+            if(data == null)
+                return;
             long start = System.currentTimeMillis();
             Result rawResult = null;
+
             Rect scanRect =((QrDecodeFragment)(((DecodeManager)callback).getFragment())).getMaskView().getScanFrame();
+            Rect previewRect =((QrDecodeFragment)(((DecodeManager)callback).getFragment())).getMaskView().getPreviewFrame();
+            scanRect = calculateRect(previewRect, new Rect(0,0, width, height), scanRect);
             PlanarYUVLuminanceSource source = buildLuminanceSource(data, scanRect, width, height);
             if (source != null) {
                 BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -144,20 +153,40 @@ public class DecodeThread extends  Thread{
             }
         }
 
+        private Rect calculateRect(Rect previewRect, Rect cameraRect, Rect scanRect){
+            Rect rect = null;
+            if (previewRect == null || cameraRect == null) {
+                return rect;
+            }
+
+            rect = new Rect();
+
+            //缩放比例
+//            float scaleL = (float)scanRect.left / (float)(previewRect.right - previewRect.left);
+//            float scaleR = (float)scanRect.right / (float)(previewRect.right - previewRect.left);
+//            float scaleT = (float)scanRect.top / (float)(previewRect.bottom - previewRect.top);
+//            float scaleB = (float)scanRect.bottom / (float)(previewRect.bottom - previewRect.top);
+
+//            rect.left = (int)(scaleL * cameRect.width());
+//            rect.right = (int)(scaleR * cameRect.width());
+//            rect.top = (int)(scaleT * cameRect.height());
+//            rect.bottom = (int)(scaleB * cameRect.height());
+            rect.left = (cameraRect.width() - scanRect.width())/2;
+            rect.right = rect.left + scanRect.width();
+            rect.top = (cameraRect.height() - scanRect.height())/2;
+            rect.bottom = rect.top + scanRect.height();
+
+            return rect;
+        }
+
         public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, Rect previewRect, int width, int height) {
             if (previewRect == null) {
                 return null;
             }
             // Go ahead and assume it's YUV rather than die.
-            if(width > height){
-                return new PlanarYUVLuminanceSource(data, width, height,  previewRect.top, previewRect.left,
-                        previewRect.height(), previewRect.width(),  false);
-            }else{
-                return new PlanarYUVLuminanceSource(data, width, height, previewRect.left, previewRect.top,
-                        previewRect.width(), previewRect.height(), false);
-            }
+            return new PlanarYUVLuminanceSource(data, width, height, previewRect.left, previewRect.top,
+                    previewRect.width(), previewRect.height(), false);
         }
-
 
         private static void bundleThumbnail(PlanarYUVLuminanceSource source, DecodeResult decodeResult) {
             int[] pixels = source.renderThumbnail();

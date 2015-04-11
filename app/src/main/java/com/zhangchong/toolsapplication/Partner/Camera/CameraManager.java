@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraConfig;
+import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraSurfaceCallback;
 import com.zhangchong.toolsapplication.Utils.LogHelper;
 
@@ -25,6 +26,7 @@ public class CameraManager {
     private CameraSurfaceCallback mSurfaceViewCallback;
     private Camera mCamera;
     private CameraConfig mCameraConfig;
+    private CameraPreference mCameraPreference;
     private Camera.PreviewCallback mPreviewCallback;
 
     private static CameraManager manager;
@@ -40,7 +42,8 @@ public class CameraManager {
 
     private CameraManager(Context context) {
         mContext = context;
-        mCameraConfig = new CameraConfig(context);
+        mCameraConfig = CameraConfig.newInstance(context);
+        mCameraPreference = CameraPreference.newInstance(context);
     }
 
     public void initCameraSurface(SurfaceView surfaceView) {
@@ -83,6 +86,10 @@ public class CameraManager {
 
     public CameraConfig getCameraConfig(){
         return mCameraConfig;
+    }
+
+    public CameraPreference getCameraPreference(){
+        return mCameraPreference;
     }
 
     //切换摄像头的时候要释放之前的设备
