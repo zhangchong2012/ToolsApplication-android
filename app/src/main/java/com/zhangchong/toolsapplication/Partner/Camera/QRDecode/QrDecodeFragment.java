@@ -1,6 +1,7 @@
 package com.zhangchong.toolsapplication.Partner.Camera.QRDecode;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -108,12 +109,18 @@ public class QrDecodeFragment extends Fragment {
                 return;
             switch (msg.what){
                 case DECODE_FAILED:
-                    Toast.makeText(fragment.getActivity(), "failed!", Toast.LENGTH_SHORT);
                     break;
                 case DECODE_SUCCESS:
-//                    if(msg.obj != null)
-                    fragment.getActivity().finish();
-                        Toast.makeText(fragment.getActivity(), "parse ok !", Toast.LENGTH_SHORT);
+                    if(msg.obj != null){
+                        DecodeResult result = (DecodeResult)msg.obj;
+                        Intent intent = new Intent();
+                        Bundle args = new Bundle();
+                        args.putString("value", result.rawResult.getText());
+                        intent.putExtras(args);
+
+//                        fragment.getActivity().setResult(Activity.RESULT_OK, intent);
+//                        fragment.getActivity().finish();
+                    }
                     break;
                 case DECODE_POSSIBLE: {
                     if (msg.obj != null){

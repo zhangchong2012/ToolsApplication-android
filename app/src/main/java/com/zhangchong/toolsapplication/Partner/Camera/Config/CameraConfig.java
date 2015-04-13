@@ -61,10 +61,16 @@ public class CameraConfig {
             }
 
             boolean isCandidatePortrait = realWidth < realHeight;
-//            int maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight;
-//            int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
-            int maybeFlippedWidth = isCandidatePortrait ? realHeight: realWidth;
-            int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
+            int degree = CameraPreference.getInstance().getCameraSettingOrientation();
+            int maybeFlippedWidth = 0;
+            int maybeFlippedHeight = 0;
+            if(degree % 90 == 0){
+                maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight;
+                maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
+            }else{
+                maybeFlippedWidth = isCandidatePortrait ? realHeight: realWidth;
+                maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
+            }
             if (maybeFlippedWidth == w && maybeFlippedHeight == h) {
                 Point exactPoint = new Point(realWidth, realHeight);
                 return exactPoint;

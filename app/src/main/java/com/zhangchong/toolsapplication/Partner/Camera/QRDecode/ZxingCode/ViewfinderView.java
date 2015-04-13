@@ -31,9 +31,12 @@ import android.view.View;
 import com.google.zxing.ResultPoint;
 import com.zhangchong.toolsapplication.Partner.Camera.CameraManager;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraConfig;
+import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
 import com.zhangchong.toolsapplication.Partner.Camera.QRDecode.QRUtils;
 import com.zhangchong.toolsapplication.R;
+import com.zhangchong.toolsapplication.Utils.LogHelper;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,12 +47,12 @@ import java.util.List;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ViewfinderView extends View {
-
+    public static final String TAG = "ViewfinderView";
     private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
     private static final long ANIMATION_DELAY = 80L;
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
-    private static final int POINT_SIZE = 6;
+    private static final int POINT_SIZE = 20;
 
     private final Paint paint;
     private Bitmap resultBitmap;
@@ -66,12 +69,29 @@ public final class ViewfinderView extends View {
 
     private Rect mScanFrame = null;
     private Rect mPreviewFrame = null;
+    private int mStatusBarHeight = 0;
     // This constructor is used when the class is built from an XML resource.
     public ViewfinderView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         init(context,attrs, 0);
+
+//        Class<?> c = null;
+//        Object obj = null;
+//        Field field = null;
+//        int x = 0, sbar = 0;
+//        try {
+//            c = Class.forName("com.android.internal.R$dimen");
+//            obj = c.newInstance();
+//            field = c.getField("status_bar_height");
+//            mStatusBarHeight = Integer.parseInt(field.get(obj).toString());
+////            mStatusBarHeight = getResources().getDimensionPixelSize(x);
+//        } catch (Exception e1) {
+//            LogHelper.logD(TAG, "get status bar height fail");
+//            e1.printStackTrace();
+//        }
+
     }
 
     private void init(Context context, AttributeSet attrs, int defStyle) {
@@ -130,7 +150,7 @@ public final class ViewfinderView extends View {
 
             Point cameraPoint = CameraConfig.getInstance().getCameraBestPreviewSize();
             Rect qrRect = QRUtils.calculateQrRect(mPreviewFrame, mScanFrame, new Rect(0,0, cameraPoint.x, cameraPoint.y));
-            float scaleX = (float)frame.width() / (float) qrRect.width();
+            float scaleX = (float)frame.width() / (float) qrRect.height();
             float scaleY = (float)frame.height() / (float) qrRect.height();
 
             List<ResultPoint> currentPossible = possibleResultPoints;
@@ -147,7 +167,7 @@ public final class ViewfinderView extends View {
                 synchronized (currentPossible) {
                     for (ResultPoint point : currentPossible) {
                         canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                                frameTop + (int) (point.getY() * scaleY),
+                                frameTop + (int) (point.getY() * scaleY) + mStatusBarHeight,
                                 POINT_SIZE, paint);
                     }
                 }
@@ -205,6 +225,7 @@ public final class ViewfinderView extends View {
     public void addPossibleResultPoint(ResultPoint point) {
         List<ResultPoint> points = possibleResultPoints;
         synchronized (points) {
+            point = QRUtils.calculatePossiblePoint(point, mScanFrame.width(), mScanFrame.height());
             points.add(point);
             int size = points.size();
             if (size > MAX_RESULT_POINTS) {

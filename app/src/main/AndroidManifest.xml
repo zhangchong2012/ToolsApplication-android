@@ -35,7 +35,6 @@
 
         <activity
             android:name=".Partner.Camera.CameraActivity"
-            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
     </application>

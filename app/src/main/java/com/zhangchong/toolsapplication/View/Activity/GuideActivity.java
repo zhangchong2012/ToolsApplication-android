@@ -1,10 +1,13 @@
 package com.zhangchong.toolsapplication.View.Activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.zhangchong.toolsapplication.Partner.Camera.CameraActivity;
 import com.zhangchong.toolsapplication.R;
@@ -78,6 +81,21 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case CameraActivity.TYPE_CAMERA_QR_CODE:
+                if(resultCode == Activity.RESULT_OK){
+                    String value = data.getExtras().getString("value");
+                    Toast.makeText(this, "parse ok :" +value, Toast.LENGTH_LONG);
+                    ((GuideFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GUIDE)).addText(value);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void onItemClick(int position) {
@@ -92,6 +110,8 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                 break;
             case 2:
                 startActivity(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_QR_CODE));
+//                startActivityForResult(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_QR_CODE),
+//                        CameraActivity.TYPE_CAMERA_QR_CODE);
 //                SampleCode.testContentUpdateProvider(this);
                 break;
             case 3:

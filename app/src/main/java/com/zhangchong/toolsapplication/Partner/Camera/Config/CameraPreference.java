@@ -37,7 +37,7 @@ public class CameraPreference {
     }
 
     public int getCameraSettingOrientation() {
-        return mPreferences.getInt(PREFERENCE_FLASH, 0);
+        return mPreferences.getInt(PREFERENCE_FLASH, 90);
     }
 
     public void setCameraSettingOrientation(int degree) {

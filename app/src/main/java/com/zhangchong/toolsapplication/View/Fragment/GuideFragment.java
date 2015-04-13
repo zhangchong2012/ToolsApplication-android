@@ -50,6 +50,20 @@ public class GuideFragment extends Fragment {
         return initViews(inflater, container, savedInstanceState);
     }
 
+    public void addText(String text){
+        String[] temp = new String[mToolsName.length];
+        for (int i = 0; i < temp.length; i++) {
+            if(i == temp.length -1){
+                temp[i] = text;
+            }else {
+                temp[i] = mToolsName[i];
+            }
+        }
+
+        mToolsName = temp;
+        mListViewAdapter.notifyDataSetChanged();
+    }
+
     public View initViews(LayoutInflater inflater, ViewGroup container,
                           Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_guide, container, false);
