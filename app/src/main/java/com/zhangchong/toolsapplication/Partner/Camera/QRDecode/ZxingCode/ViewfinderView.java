@@ -22,12 +22,16 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
 import com.zhangchong.toolsapplication.Partner.Camera.CameraManager;
+import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraConfig;
+import com.zhangchong.toolsapplication.Partner.Camera.QRDecode.QRUtils;
 import com.zhangchong.toolsapplication.R;
 
 import java.util.ArrayList;
@@ -124,8 +128,10 @@ public final class ViewfinderView extends View {
             canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
 
 
-            float scaleX = frame.width() / (float) mPreviewFrame.width();
-            float scaleY = frame.height() / (float) mPreviewFrame.height();
+            Point cameraPoint = CameraConfig.getInstance().getCameraBestPreviewSize();
+            Rect qrRect = QRUtils.calculateQrRect(mPreviewFrame, mScanFrame, new Rect(0,0, cameraPoint.x, cameraPoint.y));
+            float scaleX = (float)frame.width() / (float) qrRect.width();
+            float scaleY = (float)frame.height() / (float) qrRect.height();
 
             List<ResultPoint> currentPossible = possibleResultPoints;
             List<ResultPoint> currentLast = lastPossibleResultPoints;

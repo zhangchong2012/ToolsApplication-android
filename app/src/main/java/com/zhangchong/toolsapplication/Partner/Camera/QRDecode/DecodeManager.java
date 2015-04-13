@@ -43,17 +43,22 @@ public class DecodeManager implements IDecodeCallback {
         switch (status){
             case IDecodeCallback.STATUS_OK:
                 msgWhat = QrDecodeFragment.QrHandler.DECODE_SUCCESS;
+                break;
             case IDecodeCallback.STATUS_ERROR:
                 msgWhat = QrDecodeFragment.QrHandler.DECODE_FAILED;
+                break;
+            default:
+                msgWhat = QrDecodeFragment.QrHandler.DECODE_FAILED;
+                break;
         }
         Message msg = mStatusHandler.obtainMessage(msgWhat, result);
-//        msg.obj = result.rawResult.getText();
         msg.sendToTarget();
     }
 
     @Override
     public void foundPossibleResultPoint(ResultPoint point) {
-        ResultPoint temp = new ResultPoint(point.getY(), point.getX());
+        if(mStatusHandler == null)
+            return;
         Message msg = mStatusHandler.obtainMessage(QrDecodeFragment.QrHandler.DECODE_POSSIBLE, point);
         msg.sendToTarget();
     }

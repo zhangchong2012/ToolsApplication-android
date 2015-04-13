@@ -17,6 +17,9 @@ import java.util.List;
  * Created by Zhangchong on 2015/4/9.
  */
 public class CameraConfig {
+    private static final int MIN_PREVIEW_PIXELS = 470 * 320; // normal screen
+    private static final int MAX_PREVIEW_PIXELS = 1280 * 800;
+
     private Context mContext;
     private Point cameraBestPreviewSize;
     private Point cameraBestPictureSize;
@@ -51,9 +54,17 @@ public class CameraConfig {
         for (Camera.Size supportedPreviewSize : rawSupportedSizes) {
             int realWidth = supportedPreviewSize.width;
             int realHeight = supportedPreviewSize.height;
+
+            int pixels = realWidth * realHeight;
+            if (pixels < MIN_PREVIEW_PIXELS || pixels > MAX_PREVIEW_PIXELS) {
+                continue;
+            }
+
             boolean isCandidatePortrait = realWidth < realHeight;
-            int maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight;
-            int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
+//            int maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight;
+//            int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
+            int maybeFlippedWidth = isCandidatePortrait ? realHeight: realWidth;
+            int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
             if (maybeFlippedWidth == w && maybeFlippedHeight == h) {
                 Point exactPoint = new Point(realWidth, realHeight);
                 return exactPoint;

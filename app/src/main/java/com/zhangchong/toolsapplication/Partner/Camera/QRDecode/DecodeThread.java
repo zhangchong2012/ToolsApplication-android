@@ -128,10 +128,11 @@ public class DecodeThread extends  Thread{
             long start = System.currentTimeMillis();
             Result rawResult = null;
 
+
             Rect scanRect =((QrDecodeFragment)(((DecodeManager)callback).getFragment())).getMaskView().getScanFrame();
             Rect previewRect =((QrDecodeFragment)(((DecodeManager)callback).getFragment())).getMaskView().getPreviewFrame();
-            scanRect = calculateRect(previewRect, new Rect(0,0, width, height), scanRect);
-            PlanarYUVLuminanceSource source = buildLuminanceSource(data, scanRect, width, height);
+            Rect qrRect = QRUtils.calculateQrRect(previewRect, scanRect, new Rect(0,0,width, height));
+            PlanarYUVLuminanceSource source = buildLuminanceSource(data, qrRect, width, height);
             if (source != null) {
                 BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                 try {
@@ -146,37 +147,11 @@ public class DecodeThread extends  Thread{
                 long end = System.currentTimeMillis();
                 DecodeResult decodeResult = new DecodeResult();
                 decodeResult.rawResult = rawResult;
-                bundleThumbnail(source, decodeResult);
+//                bundleThumbnail(source, decodeResult);
                 callback.CallDecodeStatus(IDecodeCallback.STATUS_OK, decodeResult);
             } else {
                 callback.CallDecodeStatus(IDecodeCallback.STATUS_ERROR, null);
             }
-        }
-
-        private Rect calculateRect(Rect previewRect, Rect cameraRect, Rect scanRect){
-            Rect rect = null;
-            if (previewRect == null || cameraRect == null) {
-                return rect;
-            }
-
-            rect = new Rect();
-
-            //缩放比例
-//            float scaleL = (float)scanRect.left / (float)(previewRect.right - previewRect.left);
-//            float scaleR = (float)scanRect.right / (float)(previewRect.right - previewRect.left);
-//            float scaleT = (float)scanRect.top / (float)(previewRect.bottom - previewRect.top);
-//            float scaleB = (float)scanRect.bottom / (float)(previewRect.bottom - previewRect.top);
-
-//            rect.left = (int)(scaleL * cameRect.width());
-//            rect.right = (int)(scaleR * cameRect.width());
-//            rect.top = (int)(scaleT * cameRect.height());
-//            rect.bottom = (int)(scaleB * cameRect.height());
-            rect.left = (cameraRect.width() - scanRect.width())/2;
-            rect.right = rect.left + scanRect.width();
-            rect.top = (cameraRect.height() - scanRect.height())/2;
-            rect.bottom = rect.top + scanRect.height();
-
-            return rect;
         }
 
         public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, Rect previewRect, int width, int height) {
@@ -188,6 +163,7 @@ public class DecodeThread extends  Thread{
                     previewRect.width(), previewRect.height(), false);
         }
 
+        //解析扫描的图片
         private static void bundleThumbnail(PlanarYUVLuminanceSource source, DecodeResult decodeResult) {
             int[] pixels = source.renderThumbnail();
             int width = source.getThumbnailWidth();

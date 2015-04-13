@@ -108,9 +108,11 @@ public class QrDecodeFragment extends Fragment {
                 return;
             switch (msg.what){
                 case DECODE_FAILED:
+                    Toast.makeText(fragment.getActivity(), "failed!", Toast.LENGTH_SHORT);
                     break;
                 case DECODE_SUCCESS:
 //                    if(msg.obj != null)
+                    fragment.getActivity().finish();
                         Toast.makeText(fragment.getActivity(), "parse ok !", Toast.LENGTH_SHORT);
                     break;
                 case DECODE_POSSIBLE: {
