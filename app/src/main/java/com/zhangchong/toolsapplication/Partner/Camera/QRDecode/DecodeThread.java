@@ -147,7 +147,7 @@ public class DecodeThread extends  Thread{
                 long end = System.currentTimeMillis();
                 DecodeResult decodeResult = new DecodeResult();
                 decodeResult.rawResult = rawResult;
-//                bundleThumbnail(source, decodeResult);
+                bundleThumbnail(source, decodeResult);
                 callback.CallDecodeStatus(IDecodeCallback.STATUS_OK, decodeResult);
             } else {
                 callback.CallDecodeStatus(IDecodeCallback.STATUS_ERROR, null);

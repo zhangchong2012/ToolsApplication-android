@@ -2,6 +2,9 @@ package com.zhangchong.toolsapplication.Partner.Camera.QRDecode;
 
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import com.google.zxing.ResultPoint;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
@@ -77,5 +80,8 @@ public class QRUtils {
         return point;
     }
 
+    public  static void   StartFragment(FragmentManager manager, Fragment fragment, Bundle args){
+
+    }
 
 }

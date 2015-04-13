@@ -13,6 +13,9 @@
     </string-array>
 
     <string name="title_activity_camera">CameraActivity</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="button_back">Back</string>
+    <string name="button_share">Share</string>
+    <string name="button_book">Book</string>
+    <string name="button_goon">Go on</string>
 </resources>

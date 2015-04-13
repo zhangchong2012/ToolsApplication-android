@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.zxing.ResultPoint;
+import com.zhangchong.toolsapplication.Partner.Camera.ActivityCallback;
 import com.zhangchong.toolsapplication.Partner.Camera.CameraActivity;
 import com.zhangchong.toolsapplication.Partner.Camera.QRDecode.ZxingCode.ViewfinderView;
 import com.zhangchong.toolsapplication.R;
@@ -26,6 +27,7 @@ public class QrDecodeFragment extends Fragment {
     private Handler mHandler;
 
     private ViewfinderView mMaskView;
+    private ActivityCallback mListener;
 
     public static QrDecodeFragment newInstance() {
         QrDecodeFragment fragment = new QrDecodeFragment();
@@ -62,12 +64,12 @@ public class QrDecodeFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnQRDecodeListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+            mListener = (ActivityCallback) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement QRDecodeListener");
+        }
     }
 
     @Override
@@ -111,15 +113,11 @@ public class QrDecodeFragment extends Fragment {
                 case DECODE_FAILED:
                     break;
                 case DECODE_SUCCESS:
-                    if(msg.obj != null){
-                        DecodeResult result = (DecodeResult)msg.obj;
-                        Intent intent = new Intent();
-                        Bundle args = new Bundle();
-                        args.putString("value", result.rawResult.getText());
-                        intent.putExtras(args);
-
-//                        fragment.getActivity().setResult(Activity.RESULT_OK, intent);
-//                        fragment.getActivity().finish();
+                    if(msg.obj != null && fragment.mListener != null){
+                        DecodeResult rawResult = (DecodeResult)msg.obj;
+                        Bundle args = DecodeResult.getBundles(rawResult.rawResult,
+                                rawResult.bytes, rawResult.factor);
+                        fragment.mListener.callBackWithData(ActivityCallback.TYPE_DECODE, args);
                     }
                     break;
                 case DECODE_POSSIBLE: {
