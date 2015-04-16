@@ -2,7 +2,7 @@ package com.zhangchong.toolsapplication.Presenter;
 
 import android.content.Context;
 
-import com.zhangchong.toolsapplication.Data.FileManager;
+import com.zhangchong.libutils.FileManager;
 
 /**
  * Created by Zhangchong on 2015/4/4.

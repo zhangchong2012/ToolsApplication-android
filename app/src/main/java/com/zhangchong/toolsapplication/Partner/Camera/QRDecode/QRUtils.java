@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.google.zxing.ResultPoint;
+import com.zhangchong.libutils.LogHelper;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
-import com.zhangchong.toolsapplication.Utils.LogHelper;
 
 /**
  * Created by Zhangchong on 2015/4/13.
@@ -60,7 +60,7 @@ public class QRUtils {
 
 
     public static ResultPoint calculatePossiblePoint(ResultPoint point, int preWidth, int preHeight){
-        LogHelper.logD("point", "start point.x is：" +point.getX() + ", point.y is:" + point.getY());
+        LogHelper.logD("point", "start point.x is：" + point.getX() + ", point.y is:" + point.getY());
         int degree = CameraPreference.getInstance().getCameraSettingOrientation();
         if(degree%90 == 0){
             //计算的点都是旋转后的屏幕。要平移一个屏幕到当前屏幕范围内

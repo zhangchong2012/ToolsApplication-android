@@ -1,8 +1,8 @@
 package com.zhangchong.toolsapplication.Data.Bean;
 
-import com.zhangchong.toolsapplication.Data.DAO.DaoBean;
-import com.zhangchong.toolsapplication.Data.DAO.DaoBeanSchema;
-import com.zhangchong.toolsapplication.Data.DAO.DaoEntry;
+import com.zhangchong.libdao.DAO.DaoBean;
+import com.zhangchong.libdao.DAO.DaoBeanSchema;
+import com.zhangchong.libdao.DAO.DaoEntry;
 
 /**
  * Created by Zhangchong on 2015/4/4.

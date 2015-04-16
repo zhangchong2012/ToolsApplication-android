@@ -2,7 +2,6 @@ package com.zhangchong.toolsapplication.Partner.Camera.QRDecode;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -15,12 +14,7 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.zhangchong.toolsapplication.Data.FileManager;
-import com.zhangchong.toolsapplication.Partner.Camera.CameraManager;
-import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
 import com.zhangchong.toolsapplication.Partner.Camera.QRDecode.ZxingCode.DecodeFormatManager;
-import com.zhangchong.toolsapplication.R;
-import com.zhangchong.toolsapplication.Utils.LogHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;

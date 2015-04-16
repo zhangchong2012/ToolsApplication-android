@@ -8,17 +8,31 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.zhangchong.libdao.SqlManager;
+import com.zhangchong.libdao.SqlTabs;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
-import com.zhangchong.toolsapplication.Data.DAO.DaoEntrySchema;
-import com.zhangchong.toolsapplication.Data.SqlManager;
+import com.zhangchong.libdao.DAO.DaoEntrySchema;
+import com.zhangchong.toolsapplication.Data.Bean.FileBean;
+import com.zhangchong.toolsapplication.Data.Bean.QRBean;
 
 public class ToolsContentProvider extends ContentProvider {
     private SqlManager mSqlManager;
 
+    private static final DaoEntrySchema[] initTables = {
+            ExcelSheetBean.schema,
+            ExcelCellBean.schema,
+            FileBean.schema,
+            QRBean.schema
+    };
     @Override
     public boolean onCreate() {
-        mSqlManager = new SqlManager(getContext());
+        mSqlManager = new SqlManager(getContext(), new SqlTabs() {
+            @Override
+            public DaoEntrySchema[] getTables() {
+                return initTables;
+            }
+        });
         return mSqlManager != null;
     }
 

@@ -34,7 +34,6 @@ import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraConfig;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
 import com.zhangchong.toolsapplication.Partner.Camera.QRDecode.QRUtils;
 import com.zhangchong.toolsapplication.R;
-import com.zhangchong.toolsapplication.Utils.LogHelper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

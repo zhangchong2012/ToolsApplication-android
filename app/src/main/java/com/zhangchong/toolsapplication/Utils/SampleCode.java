@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.zhangchong.libutils.LogHelper;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 import com.zhangchong.toolsapplication.Presenter.ApplicationPresenter;
 import com.zhangchong.toolsapplication.Presenter.ToolsUri;
@@ -77,7 +78,7 @@ public class SampleCode {
 //            String type=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.FILE_TYPE));
             String sheet=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_NAME));
             String sheetindex=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_INDEX));
-            LogHelper.logD(GuideActivity.TAG, "id:" + id +", name:" + name + ", sheet:" + sheet
+            LogHelper.logD(GuideActivity.TAG, "id:" + id + ", name:" + name + ", sheet:" + sheet
                     + ", sheetindex:" + sheetindex);
         }
     }

@@ -5,6 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/ToolsApplication.iml" filepath="$PROJECT_DIR$/ToolsApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/ToolsApplication-android.iml" filepath="$PROJECT_DIR$/ToolsApplication-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libdao/libdao.iml" filepath="$PROJECT_DIR$/libdao/libdao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libnetwork/libnetwork.iml" filepath="$PROJECT_DIR$/libnetwork/libnetwork.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libutils/libutils.iml" filepath="$PROJECT_DIR$/libutils/libutils.iml" />
     </modules>
   </component>
 </project>

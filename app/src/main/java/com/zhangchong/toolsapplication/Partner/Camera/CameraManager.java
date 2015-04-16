@@ -6,10 +6,10 @@ import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.zhangchong.libutils.LogHelper;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraConfig;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraPreference;
 import com.zhangchong.toolsapplication.Partner.Camera.Config.CameraSurfaceCallback;
-import com.zhangchong.toolsapplication.Utils.LogHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
