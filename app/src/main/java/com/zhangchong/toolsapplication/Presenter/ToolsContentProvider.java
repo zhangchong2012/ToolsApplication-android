@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.zhangchong.libdao.SqlManager;
-import com.zhangchong.libdao.SqlTabs;
+import com.zhangchong.libnetwork.Tools.Cache.CacheBean;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 import com.zhangchong.libdao.DAO.DaoEntrySchema;
@@ -23,16 +23,17 @@ public class ToolsContentProvider extends ContentProvider {
             ExcelSheetBean.schema,
             ExcelCellBean.schema,
             FileBean.schema,
-            QRBean.schema
+            QRBean.schema,
+            CacheBean.schema
     };
     @Override
     public boolean onCreate() {
-        mSqlManager = new SqlManager(getContext(), new SqlTabs() {
+        mSqlManager = new SqlManager(getContext()){
             @Override
             public DaoEntrySchema[] getTables() {
                 return initTables;
             }
-        });
+        };
         return mSqlManager != null;
     }
 

@@ -491,11 +491,11 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      *
      * <p>The default implementation just returns the passed 'networkError'.</p>
      *
-     * @param volleyError the error retrieved from the network
+     * @param e the error retrieved from the network
      * @return an NetworkError augmented with additional information
      */
-    public NetException parseNetworkError(NetException volleyError) {
-        return volleyError;
+    public NetException parseNetworkError(NetException e) {
+        return e;
     }
 
     /**

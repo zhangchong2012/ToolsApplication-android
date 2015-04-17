@@ -133,8 +133,8 @@ public class NetworkDispatcher extends Thread {
                 // Post the response back.
                 request.markDelivered();
                 mDelivery.postResponse(request, response);
-            } catch (NetException volleyError) {
-                parseAndDeliverNetworkError(request, volleyError);
+            } catch (NetException e1) {
+                parseAndDeliverNetworkError(request, e1);
             } catch (Exception e) {
                 NetLog.e(e, "Unhandled exception %s", e.toString());
                 mDelivery.postError(request, new NetException(e));

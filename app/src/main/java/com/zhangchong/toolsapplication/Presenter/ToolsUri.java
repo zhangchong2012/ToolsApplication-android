@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.zhangchong.libutils.Constant;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 
@@ -12,7 +13,7 @@ import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
  * Created by TangGe on 2015/4/8.
  */
 public class ToolsUri {
-    public static final String LEGACY_AUTHORITY = "com.tools.provider";
+
     public static final String EXCEL_FILE = "excel_file";
     public static final String EXCEL_FILE_ITEM = "excel_file/#";
     public static final String EXCEL_CELL = "excel_cell";
@@ -28,14 +29,14 @@ public class ToolsUri {
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(LEGACY_AUTHORITY, EXCEL_FILE, ExcelUri.EXCEL_FILE);
-        URI_MATCHER.addURI(LEGACY_AUTHORITY, EXCEL_FILE_ITEM, ExcelUri.EXCEL_FILE_ID);
-        URI_MATCHER.addURI(LEGACY_AUTHORITY, EXCEL_CELL, ExcelUri.EXCEL_CELL);
-        URI_MATCHER.addURI(LEGACY_AUTHORITY, EXCEL_CELL_ITEM, ExcelUri.EXCEL_CELL_ID);
+        URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY, EXCEL_FILE, ExcelUri.EXCEL_FILE);
+        URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY, EXCEL_FILE_ITEM, ExcelUri.EXCEL_FILE_ID);
+        URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY, EXCEL_CELL, ExcelUri.EXCEL_CELL);
+        URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY, EXCEL_CELL_ITEM, ExcelUri.EXCEL_CELL_ID);
     }
 
     public  static  class ExcelFileColumn implements BaseColumns{
-        public static final Uri CONTENT_URI = Uri.parse("content://" + LEGACY_AUTHORITY + "/" + EXCEL_FILE);
+        public static final Uri CONTENT_URI = Uri.parse("content://" + Constant.LEGACY_AUTHORITY + "/" + EXCEL_FILE);
         // 表数据列
         public static final String PARENT_FILE_ID = ExcelSheetBean.Columns.excel_file_id;
         public static final String  SHEET_NAME = ExcelSheetBean.Columns.excel_name_sheet;
@@ -58,7 +59,7 @@ public class ToolsUri {
     }
 
     public  static  class ExcelCellColumn implements BaseColumns{
-        public static final Uri CONTENT_URI = Uri.parse("content://" + LEGACY_AUTHORITY + EXCEL_CELL);
+        public static final Uri CONTENT_URI = Uri.parse("content://" + Constant.LEGACY_AUTHORITY + EXCEL_CELL);
         public static final String  CELL_ROW = ExcelCellBean.Columns.cell_row;
         public static final String  CELL_COL = ExcelCellBean.Columns.cell_col;
         public static final String  CELL_CONTENT = ExcelCellBean.Columns.cell_content;

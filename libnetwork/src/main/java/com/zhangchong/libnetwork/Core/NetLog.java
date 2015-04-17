@@ -25,13 +25,12 @@ import java.util.Locale;
 
 /** Logging helper class. */
 public class NetLog {
-    public static String TAG = "Volley";
+    public static String TAG = "network";
 
     public static boolean DEBUG = Log.isLoggable(TAG, Log.VERBOSE);
 
     /**
      * Customize the log tag for your application, so that other apps
-     * using Volley don't mix their logs with yours.
      * <br />
      * Enable the log property for your tag before starting your app:
      * <br />
@@ -80,7 +79,6 @@ public class NetLog {
         StackTraceElement[] trace = new Throwable().fillInStackTrace().getStackTrace();
 
         String caller = "<unknown>";
-        // Walk up the stack looking for the first caller outside of VolleyLog.
         // It will be at least two frames up, so start there.
         for (int i = 2; i < trace.length; i++) {
             Class<?> clazz = trace[i].getClass();

@@ -8,16 +8,16 @@ import com.zhangchong.libdao.DAO.DaoEntrySchema;
 /**
  * Created by Zhangchong on 2015/4/4.
  */
-public class SqlManager extends SQLiteOpenHelper{
+public abstract class SqlManager extends SQLiteOpenHelper{
     private static final String DB_NAME = "tools.db";
     private static final int DB_VERSION = 1;
-    private DaoEntrySchema[] mTables;
 
 
-    public SqlManager(Context context, SqlTabs tabs){
+    public SqlManager(Context context){
         super(context,DB_NAME, null, DB_VERSION);
-        mTables = tabs.getTables();
     }
+
+    public abstract DaoEntrySchema[] getTables();
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -45,7 +45,7 @@ public class SqlManager extends SQLiteOpenHelper{
     }
 
     private void createBasicDB(SQLiteDatabase db){
-        for (DaoEntrySchema schema : mTables) {
+        for (DaoEntrySchema schema : getTables()) {
             schema.dropTables(db);
             schema.createTables(db);
         }

@@ -14,7 +14,7 @@ import com.zhangchong.libnetwork.Core.NetworkResponse;
 import com.zhangchong.libnetwork.Core.Request;
 import com.zhangchong.libnetwork.Core.RequestQueue;
 import com.zhangchong.libnetwork.Core.Response;
-import com.zhangchong.libnetwork.Tools.Cache.DiskBasedCache;
+import com.zhangchong.libnetwork.Tools.Cache.DataBaseCache;
 import com.zhangchong.libnetwork.Tools.Excutor.BasicNetworkExcutor;
 import com.zhangchong.libnetwork.Tools.Excutor.HttpClientExcutor;
 import com.zhangchong.libnetwork.Tools.Excutor.HurlExcutor;
@@ -36,6 +36,7 @@ public class NetworkManager {
     public static NetworkManager getInstance() {
         return networkManager;
     }
+    private Context mContext;
 
     public static NetworkManager createNetworkManager(Context context) {
         if(networkManager == null){
@@ -45,6 +46,7 @@ public class NetworkManager {
     }
 
     public NetworkManager(Context context){
+        mContext = context;
         mRequestQueue = initRequestQueue(context, null);
     }
 
@@ -115,7 +117,7 @@ public class NetworkManager {
         }
 
         mNetworkExcutor = new BasicNetworkExcutor(stack);
-        mCache = new DiskBasedCache(cacheDir);
+        mCache = new DataBaseCache(mContext);
         RequestQueue queue = new RequestQueue(mCache, mNetworkExcutor);
 //        RequestQueue queue = new RequestQueue(new NetworkCache(context), network, 2, new ExecutorDelivery(
 //                DatabaseThread.getInstance().getDataBaseThreadHandler()));

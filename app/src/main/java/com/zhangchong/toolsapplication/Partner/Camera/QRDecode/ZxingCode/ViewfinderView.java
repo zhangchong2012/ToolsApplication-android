@@ -148,6 +148,8 @@ public final class ViewfinderView extends View {
 
 
             Point cameraPoint = CameraConfig.getInstance().getCameraBestPreviewSize();
+            if(cameraPoint == null)
+                return;
             Rect qrRect = QRUtils.calculateQrRect(mPreviewFrame, mScanFrame, new Rect(0,0, cameraPoint.x, cameraPoint.y));
             float scaleX = (float)frame.width() / (float) qrRect.height();
             float scaleY = (float)frame.height() / (float) qrRect.height();

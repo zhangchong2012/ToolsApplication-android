@@ -9,6 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.zhangchong.libnetwork.Core.Exception.AuthFailureException;
+import com.zhangchong.libnetwork.Core.Exception.NetException;
+import com.zhangchong.libnetwork.Core.Request;
+import com.zhangchong.libnetwork.Core.Response;
+import com.zhangchong.libnetwork.NetworkManager;
+import com.zhangchong.libnetwork.Tools.Request.StringRequest;
+import com.zhangchong.libutils.LogHelper;
 import com.zhangchong.toolsapplication.Partner.Camera.CameraActivity;
 import com.zhangchong.toolsapplication.R;
 import com.zhangchong.toolsapplication.Utils.SampleCode;
@@ -16,12 +23,16 @@ import com.zhangchong.toolsapplication.View.Controller.GuideController;
 import com.zhangchong.toolsapplication.View.Controller.IController;
 import com.zhangchong.toolsapplication.View.Fragment.GuideFragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class GuideActivity extends ActionBarActivity implements GuideFragment.GuideFragmentListener{
     public static final String TAG = "GUIDE";
     public static final String TAG_FRAGMENT_GUIDE = "fragment_guide";
 
     private IController mController;
+    private NetworkManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +44,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
             getSupportFragmentManager().beginTransaction().add(R.id.guide_container,
                     fragment , TAG_FRAGMENT_GUIDE).commit();
         }
+        manager = new NetworkManager(this);
     }
 
     @Override
@@ -102,20 +114,43 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
         GuideController guideController = (GuideController)mController;
         switch (position){
             case 0:
-                SampleCode.testCreateXls(this, "test.xls");
+                startActivity(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_QR_CODE));
                 break;
             case 1:
                 startActivity(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_PHOTO));
-//                SampleCode.testContentProvider(this);
                 break;
             case 2:
-                startActivity(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_QR_CODE));
-//                startActivityForResult(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_QR_CODE),
-//                        CameraActivity.TYPE_CAMERA_QR_CODE);
-//                SampleCode.testContentUpdateProvider(this);
+                SampleCode.testContentQueryProvider(this);
                 break;
             case 3:
-                SampleCode.testContentQueryProvider(this);
+                SampleCode.testCreateXls(this, "test.xls");
+                break;
+            case 4:
+                //network
+                String url = "http://lifestyle.meizu.com/android/unauth/business/getgroupon.do";
+                StringRequest request = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        LogHelper.logD(TAG, "response:" + response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(NetException error) {
+                        LogHelper.logD(TAG, "error:" + error.getMessage());
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureException {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("params1", "value1");
+                        map.put("params2", "value2");
+                        return map;
+                    }
+                };
+
+                break;
+            case 5:
+                //httpserver
                 break;
             default:
                 break;

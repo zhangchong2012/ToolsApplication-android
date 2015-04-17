@@ -6,10 +6,12 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="name_tools">
-        <item>xls</item>
         <item>qrcode</item>
-        <item>test1</item>
-        <item>test2</item>
+        <item>camera</item>
+        <item>sqlite</item>
+        <item>xls</item>
+        <item>network</item>
+        <item>httpserver</item>
     </string-array>
 
     <string name="title_activity_camera">CameraActivity</string>
