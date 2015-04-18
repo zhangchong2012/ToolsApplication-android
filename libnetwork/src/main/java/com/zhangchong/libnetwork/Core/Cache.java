@@ -74,25 +74,25 @@ public interface Cache {
         /** Date of this response as reported by the server. */
         public long serverDate;
 
+        public static final long TTL_FOREVER = -1;
+
         /** TTL for this record. */
         public long ttl;
 
         /** Soft TTL for this record. */
         public long softTtl;
 
-        public long lastModified;
-
         /** Immutable response headers as received from server; must be non-null. */
         public Map<String, String> responseHeaders = Collections.emptyMap();
 
         /** True if the entry is expired. */
         public boolean isExpired() {
-            return this.ttl < System.currentTimeMillis();
+            return this.ttl != TTL_FOREVER ?  this.ttl < System.currentTimeMillis() : false;
         }
 
         /** True if a refresh is needed from the original data source. */
         public boolean refreshNeeded() {
-            return this.softTtl < System.currentTimeMillis();
+            return this.softTtl != TTL_FOREVER ? this.softTtl < System.currentTimeMillis() : false;
         }
     }
 

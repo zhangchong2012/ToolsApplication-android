@@ -1,11 +1,15 @@
 package com.zhangchong.libnetwork.Tools.Cache;
 
+import android.content.ContentValues;
 import android.net.Uri;
 
 import com.zhangchong.libdao.DAO.DaoBean;
 import com.zhangchong.libdao.DAO.DaoBeanSchema;
 import com.zhangchong.libdao.DAO.DaoEntry;
+import com.zhangchong.libnetwork.Core.Cache;
 import com.zhangchong.libutils.Constant;
+
+import java.util.Map;
 
 /**
  * Created by Zhangchong on 2015/4/17.
@@ -30,6 +34,12 @@ public class CacheBean extends DaoBean {
         public static final String COLUMN_ENTRY_CACHE_HEADER_LENGTH_INFO = "header_length_info";
         public static final String COLUMN_ENTRY_CACHE_BYTE_SIZE = "byte_size";
         public static final String COLUMN_ENTRY_CACHE_TYPE = "type";
+    }
+
+    public static interface TYPE{
+        public static final int TYPE_NORMAL = 0;
+        public static final int TYPE_FILE = 1;
+        public static final int TYPE_IMG = 2;
     }
 
     @Column(value = Columns.COLUMN_ENTRY_CACHE_URL, unique = true, replaceOnConflict = true)
@@ -123,4 +133,42 @@ public class CacheBean extends DaoBean {
         this.type = type;
     }
 
+
+    public static ContentValues convertToContentValues(String key, Cache.Entry cacheEntry){
+        if(cacheEntry == null)
+            return null;
+        ContentValues values = new ContentValues();
+        values.put(Columns.COLUMN_ENTRY_CACHE_ETAG, cacheEntry.etag);
+        values.put(Columns.COLUMN_ENTRY_CACHE_SERVER_DATE, cacheEntry.serverDate);
+        values.put(Columns.COLUMN_ENTRY_CACHE_TTL, cacheEntry.ttl);
+        values.put(Columns.COLUMN_ENTRY_CACHE_SOFT_TTL, cacheEntry.softTtl);
+
+        StringBuilder sbHeader = new StringBuilder(300);
+        StringBuilder sbHeaderInfo = new StringBuilder(100);
+        for (Map.Entry<String, String> e : cacheEntry.responseHeaders.entrySet()) {
+            sbHeader.append(e.getKey());
+            sbHeader.append("=");
+            sbHeader.append(e.getValue());
+            sbHeader.append(",");
+            sbHeaderInfo.append(e.getKey().length());
+            sbHeaderInfo.append(",");
+            sbHeaderInfo.append(e.getValue().length());
+            sbHeaderInfo.append(",");
+        }
+        String header = sbHeader.toString();
+        String headerInfo = sbHeaderInfo.toString();
+        values.put(Columns.COLUMN_ENTRY_CACHE_RESPONSE_HEADER, header);
+        values.put(Columns.COLUMN_ENTRY_CACHE_HEADER_LENGTH_INFO, headerInfo);
+
+        values.put(Columns.COLUMN_ENTRY_CACHE_URL, key);
+        int byteSize = 0;
+
+        //TODO 如果是图片或者文件，应该放入到文件系统里面。暂时先放入到数据库中
+        if (cacheEntry.data != null) {
+            byteSize = cacheEntry.data.length;
+        }
+        values.put(Columns.COLUMN_ENTRY_CACHE_BYTE_SIZE, byteSize);
+        values.put(Columns.COLUMN_ENTRY_CACHE_TYPE, TYPE.TYPE_NORMAL);
+        return null;
+    }
 }

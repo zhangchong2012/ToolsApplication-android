@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.zhangchong.libnetwork.Core.Exception.AuthFailureException;
 import com.zhangchong.libnetwork.Core.Exception.NetException;
+import com.zhangchong.libnetwork.Core.NetworkResponse;
 import com.zhangchong.libnetwork.Core.Request;
 import com.zhangchong.libnetwork.Core.Response;
 import com.zhangchong.libnetwork.NetworkManager;
@@ -132,6 +133,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                     @Override
                     public void onResponse(String response) {
                         LogHelper.logD(TAG, "response:" + response);
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -139,6 +141,11 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                         LogHelper.logD(TAG, "error:" + error.getMessage());
                     }
                 }){
+                    @Override
+                    public Response<String> parseNetworkResponse(NetworkResponse response) {
+                        return super.parseNetworkResponse(response);
+                    }
+
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureException {
                         Map<String, String> map = new HashMap<>();
