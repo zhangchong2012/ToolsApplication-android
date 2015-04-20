@@ -61,6 +61,13 @@ public class ToolsContentProvider extends ContentProvider {
                         ExcelCellBean.schema.valuesToObject(values, new ExcelCellBean()));
                 rowUri = ContentUris.withAppendedId(ToolsUri.ExcelCellColumn.CONTENT_URI,
                         id);
+            case ToolsUri.NETWORK_CACHE:
+            case ToolsUri.NETWORK_CACHE_ID:
+                id = insertOrReplace(mSqlManager.getWritableDatabase(), values, CacheBean.schema);
+                rowUri = ContentUris.withAppendedId(ToolsUri.ExcelCellColumn.CONTENT_URI,
+                        id);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -71,6 +78,17 @@ public class ToolsContentProvider extends ContentProvider {
         }
         return rowUri;
     }
+
+    private long insertOrReplace(SQLiteDatabase db, ContentValues values, DaoEntrySchema schema) {
+        if (values == null)
+            return -1;
+        if (values.getAsInteger(BaseColumns._ID) == 0) {
+            values.remove("_id");
+        }
+        long id = db.replace(schema.getTableName() , "_id", values);
+        return id;
+    }
+
 
     private void insertOrReplace(SQLiteDatabase db, ContentValues[] values, DaoEntrySchema schema) {
         if (values == null)
@@ -112,6 +130,17 @@ public class ToolsContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
+            case ToolsUri.NETWORK_CACHE:
+            case ToolsUri.NETWORK_CACHE_ID:{
+                db.beginTransaction();
+                try {
+                    insertOrReplace(db, values, ExcelCellBean.schema);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -140,7 +169,16 @@ public class ToolsContentProvider extends ContentProvider {
                 long id = ContentUris.parseId(uri);
                 count = ExcelCellBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
             }
-                break;
+            break;
+            case ToolsUri.NETWORK_CACHE:{
+                ExcelCellBean.schema.delete(mSqlManager.getWritableDatabase(), selection, selectionArgs);
+            }
+            case ToolsUri.NETWORK_CACHE_ID:{
+                long id = ContentUris.parseId(uri);
+                count = ExcelCellBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
+
+            }
+            break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -160,6 +198,9 @@ public class ToolsContentProvider extends ContentProvider {
                 return ExcelCellBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
             case ToolsUri.ExcelUri.EXCEL_CELL_ID:
                 return ExcelCellBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
+            case ToolsUri.NETWORK_CACHE:
+            case ToolsUri.NETWORK_CACHE_ID:
+                return CacheBean.schema.query(mSqlManager.getReadableDatabase(), selection, selectionArgs, null, null, sortOrder);
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -175,16 +216,22 @@ public class ToolsContentProvider extends ContentProvider {
                 count = ExcelSheetBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
                 break;
             case ToolsUri.ExcelUri.EXCEL_FILE_ID: {
-                long id = ContentUris.parseId(uri);
                 count = ExcelSheetBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
             }
             break;
             case ToolsUri.ExcelUri.EXCEL_CELL:
-                count = ExcelCellBean.schema.delete(mSqlManager.getWritableDatabase(), selection, selectionArgs);
+                count = ExcelCellBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
                 break;
             case ToolsUri.ExcelUri.EXCEL_CELL_ID:{
-                long id = ContentUris.parseId(uri);
-                count = ExcelCellBean.schema.deleteWithId(mSqlManager.getWritableDatabase(), id);
+                count = ExcelCellBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
+                break;
+            }
+            case ToolsUri.NETWORK_CACHE:{
+                count = CacheBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
+            }
+            break;
+            case ToolsUri.NETWORK_CACHE_ID: {
+                count = CacheBean.schema.update(mSqlManager.getWritableDatabase(), values, selection, selectionArgs);
             }
             break;
             default:

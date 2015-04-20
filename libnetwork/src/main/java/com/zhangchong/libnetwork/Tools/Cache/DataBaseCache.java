@@ -81,15 +81,15 @@ public class DataBaseCache implements Cache {
     @Override
     public void invalidate(String key, boolean fullExpire) {
         //这个函数其实Volley没有调用。
-        Entry entry = get(key);
-        if (entry != null) {
-            entry.softTtl = 0;
-            if (fullExpire) {
-                entry.ttl = 0;
-            }
-            put(key, entry);
+//        Entry entry = get(key);
+//        if (entry != null) {
+//            entry.softTtl = 0;
+//            if (fullExpire) {
+//                entry.ttl = 0;
+//            }
+//            put(key, entry);
 //            DataManager.getInstance().getDatabaseDataManager().updateCacheTtl(key, entry.softTtl, entry.ttl);
-        }
+//        }
     }
 
     @Override
@@ -108,6 +108,7 @@ public class DataBaseCache implements Cache {
     public void clear() {
         synchronized (mEntrys) {
             mEntrys.evictAll();
+            clearEntryDatabases();
         }
 //        synchronized (mPenddingWriteEntrys) {
 //            mPenddingWriteEntrys.clear();
@@ -149,7 +150,14 @@ public class DataBaseCache implements Cache {
         String selection = CacheBean.Columns.COLUMN_ENTRY_CACHE_URL +" = ?";
         String[] selectionArgs = new String[]{key};
         ContentValues values = CacheBean.convertToContentValues(key, entry);
+        if(values == null)
+            return;
         int id = mContext.getContentResolver().update(CacheBean.CONTENT_URI, values, selection, selectionArgs);
+    }
+
+
+    private void clearEntryDatabases(){
+        mContext.getContentResolver().delete(CacheBean.CONTENT_URI, null, null);
     }
 
     private Map<String, String> parseHeaderInfo(String headerInfo, String headerBody){

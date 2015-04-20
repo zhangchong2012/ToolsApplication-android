@@ -5,6 +5,8 @@ import android.content.UriMatcher;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.zhangchong.libnetwork.Tools.Cache.CacheBean;
+import com.zhangchong.libnetwork.Tools.Cache.DataBaseCache;
 import com.zhangchong.libutils.Constant;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelCellBean;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
@@ -12,7 +14,7 @@ import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 /**
  * Created by TangGe on 2015/4/8.
  */
-public class ToolsUri {
+public class ToolsUri implements Constant{
 
     public static final String EXCEL_FILE = "excel_file";
     public static final String EXCEL_FILE_ITEM = "excel_file/#";
@@ -24,7 +26,11 @@ public class ToolsUri {
         public static final int EXCEL_FILE_ID = 0x0011;
         public static final int EXCEL_CELL = 0x0015;
         public static final int EXCEL_CELL_ID = 0x0016;
+
+
     }
+    public static final int NETWORK_CACHE = 0x0021;
+    public static final int NETWORK_CACHE_ID = 0x0022;
 
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -33,6 +39,8 @@ public class ToolsUri {
         URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY, EXCEL_FILE_ITEM, ExcelUri.EXCEL_FILE_ID);
         URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY, EXCEL_CELL, ExcelUri.EXCEL_CELL);
         URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY, EXCEL_CELL_ITEM, ExcelUri.EXCEL_CELL_ID);
+        URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY , CacheBean.TAG, NETWORK_CACHE);
+        URI_MATCHER.addURI(Constant.LEGACY_AUTHORITY , CacheBean.TAG + "/#", NETWORK_CACHE_ID);
     }
 
     public  static  class ExcelFileColumn implements BaseColumns{

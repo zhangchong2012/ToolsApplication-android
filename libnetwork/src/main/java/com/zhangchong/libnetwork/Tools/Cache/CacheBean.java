@@ -16,7 +16,8 @@ import java.util.Map;
  */
 @DaoEntry.Table(value = "cache_entry")
 public class CacheBean extends DaoBean {
-    public static final Uri CONTENT_URI = Uri.parse("content://" + Constant.LEGACY_AUTHORITY + "/" + "network_cache");
+    public static final String TAG = "network_cache";
+    public static final Uri CONTENT_URI = Uri.parse("content://" + Constant.LEGACY_AUTHORITY + "/" + TAG);
 
     public static DaoBeanSchema schema = new DaoBeanSchema(CacheBean.class);
     @Override
@@ -169,6 +170,6 @@ public class CacheBean extends DaoBean {
         }
         values.put(Columns.COLUMN_ENTRY_CACHE_BYTE_SIZE, byteSize);
         values.put(Columns.COLUMN_ENTRY_CACHE_TYPE, TYPE.TYPE_NORMAL);
-        return null;
+        return values;
     }
 }

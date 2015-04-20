@@ -126,4 +126,8 @@ public class SampleCode {
             LogHelper.logD(GuideActivity.TAG, "exception", e);
         }
     }
+
+    public static void testNetwork(){
+
+    }
 }

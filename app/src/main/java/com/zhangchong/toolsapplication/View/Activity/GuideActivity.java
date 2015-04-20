@@ -128,7 +128,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                 break;
             case 4:
                 //network
-                String url = "http://lifestyle.meizu.com/android/unauth/business/getgroupon.do";
+                String url = "http://lifestyle.meizu.com/android/unauth/business/searchshop.do";
                 StringRequest request = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -149,12 +149,17 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureException {
                         Map<String, String> map = new HashMap<>();
-                        map.put("params1", "value1");
-                        map.put("params2", "value2");
+                        map.put("longitude", "113.569442");
+                        map.put("latitude", "22.372781");
+                        map.put("count", "20");
+                        map.put("page", "1");
+                        map.put("sortId", "1");
+                        map.put("categoryId", "35");
+                        map.put("cityName", "珠海");
                         return map;
                     }
                 };
-
+                manager.startRquestAsync(request);
                 break;
             case 5:
                 //httpserver
