@@ -45,7 +45,7 @@ public class NetworkManager {
         return networkManager;
     }
 
-    public NetworkManager(Context context){
+    private NetworkManager(Context context){
         mContext = context;
         mRequestQueue = initRequestQueue(context, null);
     }

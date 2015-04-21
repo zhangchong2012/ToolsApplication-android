@@ -14,6 +14,7 @@ import java.io.Writer;
 import java.util.HashMap;
 
 public class LogHelper {
+    public static final String TAG = "log";
     private static final boolean DEBUG_TRACE = true;
     private static final String LOG_FILE_PATH = Environment.getExternalStorageDirectory()
             + "/Android/data/com.zhangchong.toolsapplication/log.txt";
@@ -30,6 +31,12 @@ public class LogHelper {
     public static void logD(String tag, String msg) {
         if (isLogEnable()) {
             Log.d(tag, msg);
+        }
+    }
+
+    public static void logD( String msg) {
+        if (isLogEnable()) {
+            Log.d(TAG, msg);
         }
     }
 

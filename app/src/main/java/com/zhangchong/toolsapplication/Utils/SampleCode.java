@@ -5,6 +5,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.zhangchong.libnetwork.Core.Exception.AuthFailureException;
+import com.zhangchong.libnetwork.Core.Exception.NetException;
+import com.zhangchong.libnetwork.Core.NetworkResponse;
+import com.zhangchong.libnetwork.Core.Request;
+import com.zhangchong.libnetwork.Core.Response;
+import com.zhangchong.libnetwork.NetworkManager;
+import com.zhangchong.libnetwork.Tools.Request.StringRequest;
 import com.zhangchong.libutils.LogHelper;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
 import com.zhangchong.toolsapplication.Presenter.ApplicationPresenter;
@@ -14,6 +21,8 @@ import com.zhangchong.toolsapplication.View.Activity.GuideActivity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import jxl.Workbook;
 import jxl.format.CellFormat;
@@ -128,6 +137,36 @@ public class SampleCode {
     }
 
     public static void testNetwork(){
+        String url = "http://lifestyle.meizu.com/android/unauth/business/searchshop.do";
+        StringRequest request = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                LogHelper.logD(GuideActivity.TAG, "response:" + response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(NetException error) {
+                LogHelper.logD(GuideActivity.TAG, "error:" + error.getMessage());
+            }
+        }){
+            @Override
+            public Response<String> parseNetworkResponse(NetworkResponse response) {
+                return super.parseNetworkResponse(response);
+            }
 
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureException {
+                Map<String, String> map = new HashMap<>();
+                map.put("longitude", "113.569442");
+                map.put("latitude", "22.372781");
+                map.put("count", "20");
+                map.put("page", "1");
+                map.put("sortId", "1");
+                map.put("categoryId", "35");
+                map.put("cityName", "珠海");
+                return map;
+            }
+        };
+        NetworkManager.getInstance().startRquestAsync(request);
     }
 }

@@ -53,19 +53,17 @@ public class ToolsContentProvider extends ContentProvider {
                 //TODO twice object convert to values, need optimize
                 id = ExcelSheetBean.schema.insertOrReplace(mSqlManager.getWritableDatabase(),
                         ToolsUri.ExcelFileColumn.parseContentValues(values));
-                rowUri = ContentUris.withAppendedId(ToolsUri.ExcelFileColumn.CONTENT_URI,
-                        id);
+                rowUri = ContentUris.withAppendedId(uri, id);
                 break;
             case ToolsUri.ExcelUri.EXCEL_CELL:
                 id = ExcelCellBean.schema.insertOrReplace(mSqlManager.getWritableDatabase(),
                         ExcelCellBean.schema.valuesToObject(values, new ExcelCellBean()));
-                rowUri = ContentUris.withAppendedId(ToolsUri.ExcelCellColumn.CONTENT_URI,
-                        id);
+                rowUri = ContentUris.withAppendedId(uri, id);
             case ToolsUri.NETWORK_CACHE:
-            case ToolsUri.NETWORK_CACHE_ID:
+            case ToolsUri.NETWORK_CACHE_ID: {
                 id = insertOrReplace(mSqlManager.getWritableDatabase(), values, CacheBean.schema);
-                rowUri = ContentUris.withAppendedId(ToolsUri.ExcelCellColumn.CONTENT_URI,
-                        id);
+                rowUri = ContentUris.withAppendedId(uri, id);
+            }
                 break;
 
             default:
@@ -82,7 +80,9 @@ public class ToolsContentProvider extends ContentProvider {
     private long insertOrReplace(SQLiteDatabase db, ContentValues values, DaoEntrySchema schema) {
         if (values == null)
             return -1;
-        if (values.getAsInteger(BaseColumns._ID) == 0) {
+
+        if (values.containsKey(BaseColumns._ID) &&
+                values.getAsInteger(BaseColumns._ID) == 0) {
             values.remove("_id");
         }
         long id = db.replace(schema.getTableName() , "_id", values);
@@ -97,7 +97,8 @@ public class ToolsContentProvider extends ContentProvider {
         for (ContentValues entry : values) {
             if(entry == null)
                 continue;
-            if (entry.getAsInteger(BaseColumns._ID) == 0) {
+            if (entry.containsKey(BaseColumns._ID) &&
+                    entry.getAsInteger(BaseColumns._ID) == 0) {
                 entry.remove("_id");
             }
             long id = db.replace(schema.getTableName() , "_id", entry);

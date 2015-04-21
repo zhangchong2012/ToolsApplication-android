@@ -8,11 +8,13 @@ import android.text.TextUtils;
 
 import com.zhangchong.libnetwork.Core.Cache;
 import com.zhangchong.libnetwork.Tools.HttpHeaderParser;
+import com.zhangchong.libutils.LogHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DataBaseCache implements Cache {
+    public static final String TAG = "DataBaseCache";
     private Context mContext;
     //20m的内容大小
     private final LruCache<String, Cache.Entry> mEntrys = new LruCache<String, Cache.Entry>(20);
@@ -27,9 +29,9 @@ public class DataBaseCache implements Cache {
         Cache.Entry entry = null;
         if(TextUtils.isEmpty(key))
             return entry;
-        synchronized (mEntrys) {
-            entry = mEntrys.get(key);
-        }
+//        synchronized (mEntrys) {
+//            entry = mEntrys.get(key);
+//        }
         if (entry != null) {
             return entry;
         }
@@ -152,7 +154,10 @@ public class DataBaseCache implements Cache {
         ContentValues values = CacheBean.convertToContentValues(key, entry);
         if(values == null)
             return;
-        int id = mContext.getContentResolver().update(CacheBean.CONTENT_URI, values, selection, selectionArgs);
+        int count = mContext.getContentResolver().update(CacheBean.CONTENT_URI, values, selection, selectionArgs);
+        if(count == 0){
+            mContext.getContentResolver().insert(CacheBean.CONTENT_URI, values);
+        }
     }
 
 

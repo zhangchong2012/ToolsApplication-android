@@ -28,10 +28,10 @@ public class CacheBean extends DaoBean {
     public interface Columns extends DaoEntry.Columns {
         public static final String COLUMN_ENTRY_CACHE_URL = "url";
         public static final String COLUMN_ENTRY_CACHE_ETAG = "etag";
-        public static final String COLUMN_ENTRY_CACHE_SERVER_DATE = "serverDate";
+        public static final String COLUMN_ENTRY_CACHE_SERVER_DATE = "server_date";
         public static final String COLUMN_ENTRY_CACHE_TTL = "ttl";
-        public static final String COLUMN_ENTRY_CACHE_SOFT_TTL = "softTtl";
-        public static final String COLUMN_ENTRY_CACHE_RESPONSE_HEADER = "responseHeaders";
+        public static final String COLUMN_ENTRY_CACHE_SOFT_TTL = "soft_ttl";
+        public static final String COLUMN_ENTRY_CACHE_RESPONSE_HEADER = "response_headers";
         public static final String COLUMN_ENTRY_CACHE_HEADER_LENGTH_INFO = "header_length_info";
         public static final String COLUMN_ENTRY_CACHE_BYTE_SIZE = "byte_size";
         public static final String COLUMN_ENTRY_CACHE_TYPE = "type";

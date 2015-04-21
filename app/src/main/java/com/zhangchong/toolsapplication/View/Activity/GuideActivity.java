@@ -45,7 +45,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
             getSupportFragmentManager().beginTransaction().add(R.id.guide_container,
                     fragment , TAG_FRAGMENT_GUIDE).commit();
         }
-        manager = new NetworkManager(this);
+        manager = NetworkManager.createNetworkManager(this);
     }
 
     @Override
@@ -128,38 +128,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                 break;
             case 4:
                 //network
-                String url = "http://lifestyle.meizu.com/android/unauth/business/searchshop.do";
-                StringRequest request = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        LogHelper.logD(TAG, "response:" + response);
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(NetException error) {
-                        LogHelper.logD(TAG, "error:" + error.getMessage());
-                    }
-                }){
-                    @Override
-                    public Response<String> parseNetworkResponse(NetworkResponse response) {
-                        return super.parseNetworkResponse(response);
-                    }
-
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureException {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("longitude", "113.569442");
-                        map.put("latitude", "22.372781");
-                        map.put("count", "20");
-                        map.put("page", "1");
-                        map.put("sortId", "1");
-                        map.put("categoryId", "35");
-                        map.put("cityName", "珠海");
-                        return map;
-                    }
-                };
-                manager.startRquestAsync(request);
+                SampleCode.testNetwork();
                 break;
             case 5:
                 //httpserver
