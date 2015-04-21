@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/libdao" />
             <option value="$PROJECT_DIR$/libhttpserver" />
             <option value="$PROJECT_DIR$/libnetwork" />
+            <option value="$PROJECT_DIR$/libservice" />
             <option value="$PROJECT_DIR$/libutils" />
           </set>
         </option>

@@ -33,10 +33,12 @@ public class NetworkManager {
     private final RequestQueue mRequestQueue;
     private NetworkExcutor mNetworkExcutor;
     private Cache mCache;
+    private Context mContext;
+    private long mNum;
     public static NetworkManager getInstance() {
         return networkManager;
     }
-    private Context mContext;
+
 
     public static NetworkManager createNetworkManager(Context context) {
         if(networkManager == null){
@@ -48,6 +50,13 @@ public class NetworkManager {
     private NetworkManager(Context context){
         mContext = context;
         mRequestQueue = initRequestQueue(context, null);
+        mNum = 0;
+    }
+
+    public void onDestroy(){
+        if (mRequestQueue != null) {
+            mRequestQueue.stop();
+        }
     }
 
     public Response<?> startRquestSync(Request<?> request) throws NetException{
@@ -83,12 +92,18 @@ public class NetworkManager {
         return response;
     }
 
-    public void startRquestAsync(Request<?> request){
-        this.addRequestToQuene(request);
+    public String startRquestAsync(Request<?> request){
+        return this.addRequestToQuene(request);
     }
 
-    private void addRequestToQuene(Request<?> request) {
+    private String addRequestToQuene(Request<?> request) {
         mRequestQueue.add(request);
+        mNum ++;
+        return String.valueOf(mNum);
+    }
+
+    public void cancleRequest(Object tag){
+        mRequestQueue.cancelAll(tag);
     }
 
     private RequestQueue initRequestQueue(Context context, HttpExcutor stack) {

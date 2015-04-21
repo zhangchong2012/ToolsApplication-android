@@ -166,6 +166,7 @@ public class SampleCode {
                 map.put("cityName", "珠海");
                 return map;
             }
+
         };
         NetworkManager.getInstance().startRquestAsync(request);
     }
