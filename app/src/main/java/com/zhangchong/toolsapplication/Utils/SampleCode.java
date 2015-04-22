@@ -10,12 +10,11 @@ import com.zhangchong.libnetwork.Core.Exception.NetException;
 import com.zhangchong.libnetwork.Core.NetworkResponse;
 import com.zhangchong.libnetwork.Core.Request;
 import com.zhangchong.libnetwork.Core.Response;
-import com.zhangchong.libnetwork.NetworkManager;
 import com.zhangchong.libnetwork.Tools.Request.StringRequest;
+import com.zhangchong.libutils.FileManager;
 import com.zhangchong.libutils.LogHelper;
 import com.zhangchong.toolsapplication.Data.Bean.ExcelSheetBean;
-import com.zhangchong.toolsapplication.Presenter.ApplicationPresenter;
-import com.zhangchong.toolsapplication.Presenter.ToolsUri;
+import com.zhangchong.toolsapplication.Data.ContentProvider.ToolsUri;
 import com.zhangchong.toolsapplication.View.Activity.GuideActivity;
 
 import java.io.File;
@@ -39,7 +38,7 @@ import jxl.write.WritableWorkbook;
  * Created by Zhangchong on 2015/4/8.
  */
 public class SampleCode {
-    public static void testContentProvider(Context context){
+    public static void testContentProvider(Context context) {
         ContentResolver resolver = context.getContentResolver();
         ArrayList<ContentValues> list = new ArrayList();
         ContentValues values = new ContentValues();
@@ -49,9 +48,9 @@ public class SampleCode {
         ExcelSheetBean.schema.objectToValues(bean, values);
         list.add(values);
 
-        for (int i = 0; i < 10; ++i){
+        for (int i = 0; i < 10; ++i) {
             ContentValues temp = new ContentValues();
-            ExcelSheetBean bean1 =  new ExcelSheetBean();
+            ExcelSheetBean bean1 = new ExcelSheetBean();
 //            bean.setFileName(bean.getFileName());
             bean.setSheetIndex(i);
 //            bean.setType(ExcelSheetBean.TYPE_SHEET);
@@ -65,40 +64,39 @@ public class SampleCode {
         resolver.bulkInsert(ToolsUri.ExcelFileColumn.CONTENT_URI, sss);
     }
 
-    public static void testContentUpdateProvider(Context context){
+    public static void testContentUpdateProvider(Context context) {
         ContentResolver resolver = context.getContentResolver();
         ContentValues temp = new ContentValues();
-        ExcelSheetBean bean =  new ExcelSheetBean();
+        ExcelSheetBean bean = new ExcelSheetBean();
 //        bean.setFileName(bean.getFileName());
         bean.setSheetIndex(50);
 //        bean.setType(ExcelSheetBean.TYPE_SHEET);
 //        bean.setFileName("sheet" + 50);
         ExcelSheetBean.schema.objectToValues(bean, temp);
         temp.remove(ToolsUri.ExcelFileColumn._ID);//Warning must delete
-        resolver.update(ToolsUri.ExcelFileColumn.CONTENT_URI, temp, "file = ?", new String[]{ "sheet0"});
+        resolver.update(ToolsUri.ExcelFileColumn.CONTENT_URI, temp, "file = ?", new String[]{"sheet0"});
     }
 
-    public static void testContentQueryProvider(Context context){
+    public static void testContentQueryProvider(Context context) {
         ContentResolver resolver = context.getContentResolver();
-        Cursor cursor= resolver.query(ToolsUri.ExcelFileColumn.CONTENT_URI, null, null, null, null);
-        for(cursor.moveToFirst();!cursor.isAfterLast();cursor.moveToNext()){
-            int id=cursor.getInt(cursor.getColumnIndex(ToolsUri.ExcelFileColumn._ID));
-            String name=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.PARENT_FILE_ID));
+        Cursor cursor = resolver.query(ToolsUri.ExcelFileColumn.CONTENT_URI, null, null, null, null);
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex(ToolsUri.ExcelFileColumn._ID));
+            String name = cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.PARENT_FILE_ID));
 //            String type=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.FILE_TYPE));
-            String sheet=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_NAME));
-            String sheetindex=cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_INDEX));
+            String sheet = cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_NAME));
+            String sheetindex = cursor.getString(cursor.getColumnIndex(ToolsUri.ExcelFileColumn.SHEET_INDEX));
             LogHelper.logD(GuideActivity.TAG, "id:" + id + ", name:" + name + ", sheet:" + sheet
                     + ", sheetindex:" + sheetindex);
         }
     }
 
 
-    public static void testCreateXls(Context context, String fileName){
-        try{
+    public static void testCreateXls(Context context, String fileName) {
+        try {
             // 创建工作区
-            ApplicationPresenter presenter = new ApplicationPresenter(context.getApplicationContext());
-            File file = new File(presenter.getFilePath(fileName));
-            if(!file.exists())
+            File file = new File(FileManager.getInstance().getFilePath(fileName));
+            if (!file.exists())
                 file.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(file);
             WritableWorkbook workbook = Workbook.createWorkbook(outputStream);
@@ -131,14 +129,14 @@ public class SampleCode {
             workbook.write();
             workbook.close();
             outputStream.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             LogHelper.logD(GuideActivity.TAG, "exception", e);
         }
     }
 
-    public static void testNetwork(){
+    public static Request<?> testMakeRequest() {
         String url = "http://lifestyle.meizu.com/android/unauth/business/searchshop.do";
-        StringRequest request = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 LogHelper.logD(GuideActivity.TAG, "response:" + response);
@@ -148,7 +146,7 @@ public class SampleCode {
             public void onErrorResponse(NetException error) {
                 LogHelper.logD(GuideActivity.TAG, "error:" + error.getMessage());
             }
-        }){
+        }) {
             @Override
             public Response<String> parseNetworkResponse(NetworkResponse response) {
                 return super.parseNetworkResponse(response);
@@ -168,6 +166,6 @@ public class SampleCode {
             }
 
         };
-        NetworkManager.getInstance().startRquestAsync(request);
+        return request;
     }
 }

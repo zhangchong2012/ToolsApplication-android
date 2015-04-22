@@ -27,7 +27,7 @@
         </activity>
 
         <provider
-            android:name=".Presenter.ToolsContentProvider"
+            android:name=".Data.ContentProvider.ToolsContentProvider"
             android:authorities="com.tools.provider"
             android:enabled="true"
             android:exported="true" >
@@ -37,6 +37,11 @@
             android:name=".Partner.Camera.CameraActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
+
+        <service
+            android:name="com.zhangchong.libservice.ToolsService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

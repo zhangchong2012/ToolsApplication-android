@@ -9,31 +9,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.zhangchong.libnetwork.Core.Exception.AuthFailureException;
-import com.zhangchong.libnetwork.Core.Exception.NetException;
-import com.zhangchong.libnetwork.Core.NetworkResponse;
-import com.zhangchong.libnetwork.Core.Request;
-import com.zhangchong.libnetwork.Core.Response;
-import com.zhangchong.libnetwork.NetworkManager;
-import com.zhangchong.libnetwork.Tools.Request.StringRequest;
-import com.zhangchong.libutils.LogHelper;
 import com.zhangchong.toolsapplication.Partner.Camera.CameraActivity;
 import com.zhangchong.toolsapplication.R;
 import com.zhangchong.toolsapplication.Utils.SampleCode;
+import com.zhangchong.toolsapplication.View.Controller.GuideConnection;
 import com.zhangchong.toolsapplication.View.Controller.GuideController;
 import com.zhangchong.toolsapplication.View.Controller.IController;
 import com.zhangchong.toolsapplication.View.Fragment.GuideFragment;
 
-import java.util.HashMap;
-import java.util.Map;
 
-
-public class GuideActivity extends ActionBarActivity implements GuideFragment.GuideFragmentListener{
+public class GuideActivity extends ActionBarActivity implements GuideFragment.GuideFragmentListener {
     public static final String TAG = "GUIDE";
     public static final String TAG_FRAGMENT_GUIDE = "fragment_guide";
-
     private IController mController;
-    private NetworkManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +29,12 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
         mController = new GuideController(this);
         setContentView(R.layout.activity_guide);
         Fragment fragment = GuideFragment.newInstance();
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.guide_container,
-                    fragment , TAG_FRAGMENT_GUIDE).commit();
+                    fragment, TAG_FRAGMENT_GUIDE).commit();
         }
-        manager = NetworkManager.createNetworkManager(this);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -58,6 +46,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
     protected void onResume() {
         super.onResume();
         mController.onResume();
+
     }
 
     @Override
@@ -79,6 +68,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
         mController = null;
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_guide, menu);
@@ -97,12 +87,12 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case CameraActivity.TYPE_CAMERA_QR_CODE:
-                if(resultCode == Activity.RESULT_OK){
+                if (resultCode == Activity.RESULT_OK) {
                     String value = data.getExtras().getString("value");
-                    Toast.makeText(this, "parse ok :" +value, Toast.LENGTH_LONG);
-                    ((GuideFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GUIDE)).addText(value);
+                    Toast.makeText(this, "parse ok :" + value, Toast.LENGTH_LONG);
+                    ((GuideFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_GUIDE)).addText(value);
                 }
                 break;
             default:
@@ -112,8 +102,8 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
 
     @Override
     public void onItemClick(int position) {
-        GuideController guideController = (GuideController)mController;
-        switch (position){
+        GuideController guideController = (GuideController) mController;
+        switch (position) {
             case 0:
                 startActivity(CameraActivity.newIntent(this, CameraActivity.TYPE_CAMERA_QR_CODE));
                 break;
@@ -128,7 +118,7 @@ public class GuideActivity extends ActionBarActivity implements GuideFragment.Gu
                 break;
             case 4:
                 //network
-                SampleCode.testNetwork();
+                ((GuideController) mController).startRequest();
                 break;
             case 5:
                 //httpserver
