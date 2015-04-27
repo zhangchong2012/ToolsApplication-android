@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/libnetwork" />
             <option value="$PROJECT_DIR$/libservice" />
             <option value="$PROJECT_DIR$/libutils" />
+            <option value="$PROJECT_DIR$/weiblog" />
           </set>
         </option>
       </GradleProjectSettings>

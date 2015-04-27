@@ -14,7 +14,7 @@ import java.io.Writer;
 import java.util.HashMap;
 
 public class LogHelper {
-    public static final String TAG = "log";
+    public static final String TAG = "tools";
     private static final boolean DEBUG_TRACE = true;
     private static final String LOG_FILE_PATH = Environment.getExternalStorageDirectory()
             + "/Android/data/com.zhangchong.toolsapplication/log.txt";

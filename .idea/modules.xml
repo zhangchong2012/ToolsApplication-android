@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/libnetwork/libnetwork.iml" filepath="$PROJECT_DIR$/libnetwork/libnetwork.iml" />
       <module fileurl="file://$PROJECT_DIR$/libservice/libservice.iml" filepath="$PROJECT_DIR$/libservice/libservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/libutils/libutils.iml" filepath="$PROJECT_DIR$/libutils/libutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/weiblog/weiblog.iml" filepath="$PROJECT_DIR$/weiblog/weiblog.iml" />
     </modules>
   </component>
 </project>
