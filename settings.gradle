@@ -1,1 +1,1 @@
-include ':app', ':libnetwork', ':libdao', ':libutils', ':libhttpserver', ':libservice', ':weiblog'
+include ':app', ':libnetwork', ':libdao', ':libutils', ':libhttpserver', ':libservice', ':weiblog', ':libpay'
